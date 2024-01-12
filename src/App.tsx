@@ -9,6 +9,9 @@ function App() {
   return (
     <>
       <div>
+
+      </div>
+      <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -26,7 +29,7 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+        So, this should hot reload? 
       </p>
     </>
   )
