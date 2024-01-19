@@ -1,0 +1,8 @@
+.eventTitle {
+    font-family: 'Roboto', 'sans-serif';
+}
+
+.eventTime {
+    color: var(--bg-text-color); 
+    font-size: 0.75em;
+}

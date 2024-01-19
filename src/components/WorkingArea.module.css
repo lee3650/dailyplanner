@@ -1,0 +1,43 @@
+.container {
+    font-family: 'Roboto', 'sans-serif';
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+    height: 100vh; 
+    width: 100%;
+}
+
+.padding {
+    flex: 1; 
+}
+
+.body {
+    flex: 8; 
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin: 0;
+    height: 100vh; 
+    padding-top: 2.5%;
+}
+
+.title {
+    font-family: 'Inika', 'Sans-Serif';
+    font-size: 3em;
+}
+
+.date {
+    font-family: 'Roboto', 'Sans-Serif';
+    font-weight: 300;
+}
+
+.verticalPadding {
+    flex: 0.025; 
+}
+
+.eventCount {
+    font-family: 'Roboto', 'sans-serif';
+    color: var(--bg-text-color); 
+    font-weight: 300;
+}
