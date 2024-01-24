@@ -1,14 +1,24 @@
 import wa from './WorkingArea.module.css'
 import EventListing from './EventListing/EventListing';
-import EventData from '../model/EventData';
+import { EventListingProps } from './EventListing/EventListing';
+import {EventData } from '../model/EventData';
+import React, { useState } from 'react';
 
-const test_data = [
-    new EventData("test event", new Date(2000, 1, 1, 13, 10), new Date(2000, 1, 1, 13, 30)), 
-    new EventData("test event 2", new Date(2000, 1, 2, 14, 10), new Date(2000, 1, 1, 14, 20)), 
-    new EventData("test event 3", new Date(2000, 1, 1, 14, 20), new Date(2000, 1, 1, 15, 20)), 
-]; 
+export class WorkingAreaProp {
+    constructor(public data : EventData[]){
 
-const WorkingArea = () => {
+    }
+}
+
+const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
+    const sorted = data.sort((a, b) => (60 * (a.start.hours - b.start.hours)) + (a.start.minutes - b.start.minutes))    
+
+    const [editIndex, setEditIndex] = useState(-1); 
+
+    const OnEdit = (val : string, index : number) => {
+
+    }
+
     return (<div className={wa.container}>
         <div className={wa.padding}/>
         <div className={wa.body}>
@@ -17,7 +27,7 @@ const WorkingArea = () => {
             <h3 className={wa.eventCount}>5 events</h3>
             <div className={wa.verticalPadding}></div>
             <div className={wa.eventContainer}>
-                {test_data.map((val, index) => (<EventListing key={index} {...val}/>))}
+                {sorted.map((val, index) => (<EventListing key={index} {...new EventListingProps(val, OnEdit, index, editIndex == index, setEditIndex) }/>))}
                 <div className={wa.addNew}>
                     <p>+ new event</p>
                 </div>

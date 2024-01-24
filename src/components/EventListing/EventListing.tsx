@@ -1,15 +1,35 @@
 import el from './EventListing.module.css'; 
-import EventData from '../../model/EventData';
+import {EventData, Time } from '../../model/EventData';
 import React from 'react';
 
-const getTimeString = (start : Date, end : Date) => {
-    return `${start.toTimeString()} - ${end.toTimeString()}`; 
+const getTimeString = (start : Time, end : Time) => {
+    return `${start.toString()} - ${end.toString()}`; 
 }
 
-const EventListing : React.FC<EventData> = (props : EventData) => {
+export class EventListingProps {
+    constructor (public eventData : EventData, public onEdit : (input : string, index : number) => void,
+     public index : number, public editing : boolean, public onClick : (index : number) => void) {
+
+    }
+}
+
+const getCombinedString = (props : EventListingProps) => {
+    return `${props.eventData.title} ${getTimeString(props.eventData.start, props.eventData.end)}`; 
+}
+
+const EventListing : React.FC<EventListingProps> = (props : EventListingProps) => {
+    const data = props.eventData; 
+
+    const clicked = () => props.onClick(props.index)
+
     return (<div className={el.container}>
-        <p className={el.eventTitle}>{props.eventTitle}</p>
-        <p className={el.eventTime}>{getTimeString(props.eventStart, props.eventEnd)}</p>
+        {
+        props.editing ? (<form>
+                <input type = 'text' defaultValue = {getCombinedString(props)} onChange={e => props.onEdit(e.target.value, props.index)}/> 
+                </form>) : 
+        (<><p className={el.eventTitle} onClick={clicked}>{data.title}</p>
+        <p className={el.eventTime}>{getTimeString(data.start, data.end)}</p></>)
+        }
         <div className={el.line}></div>
     </div>)
 }
