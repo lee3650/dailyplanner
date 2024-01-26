@@ -1,0 +1,13 @@
+.addNew {
+    color: var(--text-highlight-color); 
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 3px;
+}
+
+.addNew:hover {
+    background-color: var(--hover-select-color);
+    transition: 0.05s ease; 
+}

@@ -1,8 +1,9 @@
 import wa from './WorkingArea.module.css'
 import EventListing from './EventListing/EventListing';
 import { EventListingProps } from './EventListing/EventListing';
-import {EventData } from '../model/EventData';
+import {EventData, Time } from '../model/EventData';
 import React, { useState } from 'react';
+import NewEventButton, {NewEventButtonProps} from './NewEventButton/NewEventButton';
 
 export class WorkingAreaProp {
     constructor(public data : EventData[]){
@@ -14,9 +15,33 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
     const sorted = data.sort((a, b) => (60 * (a.start.hours - b.start.hours)) + (a.start.minutes - b.start.minutes))    
 
     const [editIndex, setEditIndex] = useState(-1); 
+    const [addingNew, setAddingNew] = useState(false); 
 
     const OnEdit = (val : string, index : number) => {
+        console.log(`editing val ${val} with index ${index}`)
 
+        // so, I guess *if* the data is valid, then we write it to the array, otherwise 
+        // we don't do that. Okay... let's just say, um, we always write it for now 
+        data[index].title = val; 
+    }
+
+    const OnFinishEdit = (index : number) => {
+        console.log('finished edit!')
+        setEditIndex(-1) // hm, which one gets called first? 
+    }
+
+    const OnSubmitNewEvent = (val : string) => {
+        setAddingNew(false); 
+        // so, we can try this but it's not very react-ive 
+        data.push(new EventData(val, new Time(10, 10), new Time(11, 10))); 
+    }
+
+    const OnCancelNewEvent = () => {
+        setAddingNew(false); 
+    }
+
+    const OnClickNewEvent = () => {
+        setAddingNew(true); 
     }
 
     return (<div className={wa.container}>
@@ -27,10 +52,8 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
             <h3 className={wa.eventCount}>5 events</h3>
             <div className={wa.verticalPadding}></div>
             <div className={wa.eventContainer}>
-                {sorted.map((val, index) => (<EventListing key={index} {...new EventListingProps(val, OnEdit, index, editIndex == index, setEditIndex) }/>))}
-                <div className={wa.addNew}>
-                    <p>+ new event</p>
-                </div>
+                {sorted.map((val, index) => (<EventListing key={index} {...new EventListingProps(val, OnEdit, index, editIndex == index, setEditIndex, OnFinishEdit) }/>))}
+                <NewEventButton {...new NewEventButtonProps(addingNew, OnSubmitNewEvent, OnCancelNewEvent, OnClickNewEvent)}></NewEventButton>
             </div>
         </div>
     </div>);

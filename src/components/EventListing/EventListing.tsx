@@ -8,7 +8,7 @@ const getTimeString = (start : Time, end : Time) => {
 
 export class EventListingProps {
     constructor (public eventData : EventData, public onEdit : (input : string, index : number) => void,
-     public index : number, public editing : boolean, public onClick : (index : number) => void) {
+     public index : number, public editing : boolean, public onClick : (index : number) => void, public onFinishEdit : (index : number) => void) {
 
     }
 }
@@ -22,12 +22,12 @@ const EventListing : React.FC<EventListingProps> = (props : EventListingProps) =
 
     const clicked = () => props.onClick(props.index)
 
-    return (<div className={el.container}>
+    return (<div className={el.container} onClick={() => {if (!props.editing) { clicked()}}}>
         {
-        props.editing ? (<form>
-                <input type = 'text' defaultValue = {getCombinedString(props)} onChange={e => props.onEdit(e.target.value, props.index)}/> 
+        props.editing ? (<form onSubmit={e => {e.preventDefault(); props.onFinishEdit(props.index)}}>
+                <input autoFocus type = 'text' defaultValue = {getCombinedString(props)} onChange={e => props.onEdit(e.target.value, props.index)} onBlur={() => props.onFinishEdit(props.index)}/> 
                 </form>) : 
-        (<><p className={el.eventTitle} onClick={clicked}>{data.title}</p>
+        (<><p className={el.eventTitle}>{data.title}</p>
         <p className={el.eventTime}>{getTimeString(data.start, data.end)}</p></>)
         }
         <div className={el.line}></div>
