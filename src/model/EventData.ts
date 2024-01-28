@@ -3,6 +3,19 @@ export class EventData {
     }
 }
 
+export class ParsedEventData {
+    constructor (public success : boolean, public data : EventData) 
+    {
+
+    }
+}
+
+export class HighlightResult {
+    constructor (public valid : boolean, public startHl : number, public endHl : number) {
+
+    }
+}
+
 export class Time {
     // huh, I guess this gets automatically populated for a 'data object' type class 
     constructor(public hours : number, public minutes : number) 

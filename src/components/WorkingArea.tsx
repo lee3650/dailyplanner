@@ -1,8 +1,9 @@
 import wa from './WorkingArea.module.css'
 import EventListing from './EventListing/EventListing';
 import { EventListingProps } from './EventListing/EventListing';
-import {EventData, Time } from '../model/EventData';
+import {EventData, Time, ParsedEventData } from '../model/EventData';
 import React, { useState } from 'react';
+import { ParseEvent } from '../model/Parser';
 import NewEventButton, {NewEventButtonProps} from './NewEventButton/NewEventButton';
 
 export class WorkingAreaProp {
@@ -33,7 +34,16 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
     const OnSubmitNewEvent = (val : string) => {
         setAddingNew(false); 
         // so, we can try this but it's not very react-ive 
-        data.push(new EventData(val, new Time(10, 10), new Time(11, 10))); 
+        const parsed = ParseEvent(val); 
+        if (parsed.success)
+        {
+            data.push(new EventData(parsed.data.title, parsed.data.start, parsed.data.end)); 
+        }
+    }
+
+    const OnChangeNewEvent = (valid : boolean) => {
+        // todo - enable / disable the buttons! 
+        // honestly, we could have a single 'handle event input' component that does this for both 
     }
 
     const OnCancelNewEvent = () => {
@@ -53,7 +63,7 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
             <div className={wa.verticalPadding}></div>
             <div className={wa.eventContainer}>
                 {sorted.map((val, index) => (<EventListing key={index} {...new EventListingProps(val, OnEdit, index, editIndex == index, setEditIndex, OnFinishEdit) }/>))}
-                <NewEventButton {...new NewEventButtonProps(addingNew, OnSubmitNewEvent, OnCancelNewEvent, OnClickNewEvent)}></NewEventButton>
+                <NewEventButton {...new NewEventButtonProps(addingNew, OnSubmitNewEvent, OnCancelNewEvent, OnClickNewEvent, OnChangeNewEvent)}></NewEventButton>
             </div>
         </div>
     </div>);
