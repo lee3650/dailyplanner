@@ -32,6 +32,7 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
     }
 
     const OnSubmitNewEvent = (val : string) => {
+        console.log(`adding new event: ${val}`)
         setAddingNew(false); 
         // so, we can try this but it's not very react-ive 
         const parsed = ParseEvent(val); 

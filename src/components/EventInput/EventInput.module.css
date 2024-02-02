@@ -12,12 +12,15 @@
 .highlight_container {
   width: auto;
   color: rgba(1, 1, 1, 0); 
-  background-color: yellow;
-  opacity: 0.25;
+  opacity: 0.20;
   position: absolute; 
   white-space: pre;
   user-select: none;
   top: 0; 
   z-index: 1;
   pointer-events: none;
+}
+
+.highlight {
+  background-color: var(--text-highlight-color);
 }
