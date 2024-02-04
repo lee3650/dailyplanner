@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import ne from './NewEventButton.module.css'
 import { ComputeHighlight } from "../../model/Parser";
 import { EventInput, EventInputProps } from "../EventInput/EventInput";
@@ -17,11 +17,6 @@ const NewEventButton : React.FC<NewEventButtonProps> = ( props : NewEventButtonP
     const onchange = (val : string) => {
         const parsed = ComputeHighlight(val); 
 
-        if (parsed.valid)
-        {
-
-        }
-
         setValue(val); 
 
         props.onChange(parsed.valid); 
@@ -30,7 +25,7 @@ const NewEventButton : React.FC<NewEventButtonProps> = ( props : NewEventButtonP
     return (
         <div className={ne.addNew}>
             {props.editing ? 
-            (<EventInput {...new EventInputProps(value, onchange, props.onSubmit)}></EventInput>)
+            (<EventInput {...new EventInputProps(value, onchange, props.onSubmit, props.onCancel)}></EventInput>)
             : (<p onClick={() => { setValue(''); props.onClick(); }}>+ new event</p>)}
         </div>)
 }

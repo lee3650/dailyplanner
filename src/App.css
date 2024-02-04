@@ -16,6 +16,9 @@ body {
     --bg-text-color: #686868; 
     --hover-select-color: #171717; 
     --text-highlight-color: #E54D4D; 
+    --submit-button-color: #802a2a; 
+    --submit-button-disabled: #422424; 
+    --cancel-button-color: #1f1f1f; 
     margin: 0;
     height: 100vh; 
     background-color: var(--bg-color);

@@ -4,7 +4,7 @@ import { ComputeHighlight } from "../../model/Parser";
 import { HighlightResult } from "../../model/EventData";
 
 export class EventInputProps {
-    constructor(public value : string, public setVal : (val : string) => void, public onSubmit : (val : string) => void) {
+    constructor(public value : string, public setVal : (val : string) => void, public onSubmit : (val : string) => void, public onCancel : () => void) {
 
     }
 }
@@ -14,8 +14,6 @@ const MAX_LENGTH = 64;
 export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) => {
     function onchange(val : string) {
         // recompute highlight 
-
-        console.log(`received change: ${val}`); 
 
         val = val.replace('\n', '')
         val = val.substring(0, MAX_LENGTH)
@@ -27,6 +25,27 @@ export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) 
 
     const contentEditableRef = useRef(null);
 
+    const InsertKey = (val : string) : boolean => {
+        if (val === 'Backspace')
+        {
+            return false; 
+        }
+        if (val == 'ArrowLeft' || val === 'ArrowRight')
+        {
+            return false; 
+        }
+
+        return true; 
+    }
+
+    const onSubmitClicked = () => {
+        if (hl.valid)
+        {
+            props.onSubmit(props.value); 
+        }
+    }
+
+    /*@ts-ignore*/
     const onkeydown = e => {
         if (e.key == 'Enter')
         {
@@ -34,7 +53,11 @@ export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) 
             // todo - try call submit 
             props.onSubmit(props.value); 
         }
-        if (props.value.length >= MAX_LENGTH && e.key != 'Backspace')
+        if (e.key == 'Escape')
+        {
+            props.onCancel(); 
+        }
+        if (props.value.length >= MAX_LENGTH && InsertKey(e.key))
         {
             e.preventDefault(); 
         }
@@ -57,6 +80,7 @@ export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) 
             tabIndex={1}
             defaultValue={props.value}
             onKeyDown={onkeydown}
+            className={ei.input}
             >
             </div>
             <div className={ei.highlight_container}>
@@ -64,6 +88,8 @@ export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) 
                 <span className={ei.highlight}>{props.value.substring(hl.startHl, hl.endHl)}</span>
                 <span>{props.value.substring(hl.endHl)}</span>
             </div>
+            <button className={`${ei.button} ${ei.submit}`} disabled={!hl.valid} onClick={onSubmitClicked}>Submit</button>
+            <button className={ei.button} onClick={props.onCancel}>Cancel</button>
         </div>
         )
     );
