@@ -50,8 +50,7 @@ export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) 
         if (e.key == 'Enter')
         {
             e.preventDefault(); 
-            // todo - try call submit 
-            props.onSubmit(props.value); 
+            onSubmitClicked(); 
         }
         if (e.key == 'Escape')
         {

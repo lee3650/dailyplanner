@@ -18,15 +18,8 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
     const [editIndex, setEditIndex] = useState(-1); 
     const [addingNew, setAddingNew] = useState(false); 
 
-    const OnEdit = (val : string, index : number) => {
-        console.log(`editing val ${val} with index ${index}`)
-
-        // so, I guess *if* the data is valid, then we write it to the array, otherwise 
-        // we don't do that. Okay... let's just say, um, we always write it for now 
-        data[index].title = val; 
-    }
-
-    const OnFinishEdit = (index : number) => {
+    const OnFinishEdit = (val : string, index : number) => {
+        data[index] = ParseEvent(val).data; 
         console.log('finished edit!')
         setEditIndex(-1) // hm, which one gets called first? 
     }
@@ -55,7 +48,22 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
         setAddingNew(true); 
     }
 
-    return (<div className={wa.container}>
+    // TODO - this doesn't really work, it doesn't have focus at the right time 
+    /*@ts-ignore*/
+    const onKeyDown = e => {
+        // console.log(`got key event: ${e.key}`); 
+        if (e.key === 'a')
+        {
+            if (!addingNew && editIndex === -1)
+            {
+                setAddingNew(true); 
+            }
+        }
+    }
+
+    return (<div className={wa.container} 
+            tabIndex={-1}
+            onKeyDown={onKeyDown}>
         <div className={wa.padding}/>
         <div className={wa.body}>
             <h3 className={wa.date}>2024/1/10</h3>
@@ -63,7 +71,7 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
             <h3 className={wa.eventCount}>5 events</h3>
             <div className={wa.verticalPadding}></div>
             <div className={wa.eventContainer}>
-                {sorted.map((val, index) => (<EventListing key={index} {...new EventListingProps(val, OnEdit, index, editIndex == index, setEditIndex, OnFinishEdit) }/>))}
+                {sorted.map((val, index) => (<EventListing key={index} {...new EventListingProps(val, index, editIndex == index, setEditIndex, OnFinishEdit) }/>))}
                 <NewEventButton {...new NewEventButtonProps(addingNew, OnSubmitNewEvent, OnCancelNewEvent, OnClickNewEvent, OnChangeNewEvent)}></NewEventButton>
             </div>
         </div>

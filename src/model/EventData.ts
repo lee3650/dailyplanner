@@ -1,5 +1,17 @@
+const getTimeString = (start : Time, end : Time) => {
+    return `${start.toString()} - ${end.toString()}`; 
+}
+
 export class EventData {
     constructor(public title : string, public start : Time, public end : Time) {
+    }
+
+    toString() : string {
+        return `${getTimeString(this.start, this.end)} ${this.title}`; 
+    }
+
+    timeString() : string {
+        return getTimeString(this.start, this.end); 
     }
 }
 
@@ -15,6 +27,8 @@ export class HighlightResult {
 
     }
 }
+
+const timeRegex = /(\d{1,2}):(\d{1,2})/; 
 
 export class Time {
     // huh, I guess this gets automatically populated for a 'data object' type class 
@@ -43,5 +57,19 @@ export class Time {
         }
 
         return `${hourStr}:${mins} ${meridian}`; 
+    }
+
+    static fromString(val : string) : Time
+    {
+        const match = timeRegex.exec(val); 
+        if (!match)
+        {
+            throw new TypeError(`Invalid value input: ${val}`); 
+        }
+
+        const hours = Number.parseInt(match[1]); 
+        const minutes = Number.parseInt(match[2]); 
+
+        return new Time(hours, minutes); 
     }
 }
