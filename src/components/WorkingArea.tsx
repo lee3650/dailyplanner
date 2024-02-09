@@ -35,17 +35,18 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
         }
     }
 
-    const OnChangeNewEvent = (valid : boolean) => {
-        // todo - enable / disable the buttons! 
-        // honestly, we could have a single 'handle event input' component that does this for both 
-    }
-
     const OnCancelNewEvent = () => {
         setAddingNew(false); 
     }
 
     const OnClickNewEvent = () => {
+        setEditIndex(-1); 
         setAddingNew(true); 
+    }
+
+    const OnStartEdit = (val : number) => {
+        setEditIndex(val); 
+        setAddingNew(false); 
     }
 
     // TODO - this doesn't really work, it doesn't have focus at the right time 
@@ -61,21 +62,30 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
         }
     }
 
+    const getCurDateString = () => {
+        const today = new Date(); 
+        return `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
+    }
+
     return (<div className={wa.container} 
             tabIndex={-1}
             onKeyDown={onKeyDown}>
         <div className={wa.padding}/>
         <div className={wa.body}>
-            <h3 className={wa.date}>2024/1/10</h3>
+            <h3 className={wa.date}>{getCurDateString()}</h3>
             <h1 className={wa.title}>template name</h1>
-            <h3 className={wa.eventCount}>5 events</h3>
+            <h3 className={wa.eventCount}>{sorted.length} events</h3>
             <div className={wa.verticalPadding}></div>
             <div className={wa.eventContainer}>
-                {sorted.map((val, index) => (<EventListing key={index} {...new EventListingProps(val, index, editIndex == index, setEditIndex, OnFinishEdit) }/>))}
-                <NewEventButton {...new NewEventButtonProps(addingNew, OnSubmitNewEvent, OnCancelNewEvent, OnClickNewEvent, OnChangeNewEvent)}></NewEventButton>
+                {sorted.map((val, index) => (<EventListing key={computeKey(val, index)} {...new EventListingProps(val, index, editIndex == index, OnStartEdit, OnFinishEdit) }/>))}
+                <NewEventButton {...new NewEventButtonProps(addingNew, OnSubmitNewEvent, OnCancelNewEvent, OnClickNewEvent)}></NewEventButton>
             </div>
         </div>
     </div>);
+}
+
+const computeKey = (val : EventData, index : number) : string => {
+    return val.toString() + index; 
 }
 
 export default WorkingArea 

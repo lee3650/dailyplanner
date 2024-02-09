@@ -4,7 +4,7 @@ import { ComputeHighlight } from "../../model/Parser";
 import { HighlightResult } from "../../model/EventData";
 
 export class EventInputProps {
-    constructor(public value : string, public setVal : (val : string) => void, public onSubmit : (val : string) => void, public onCancel : () => void) {
+    constructor(public value : string, public setVal : (val : string) => void, public onSubmit : (val : string) => void, public onCancel : () => void, public defaultVal : string) {
 
     }
 }
@@ -21,7 +21,7 @@ export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) 
         props.setVal(val) 
     }
 
-    const hl : HighlightResult = ComputeHighlight(props.value)
+    const hl : HighlightResult = ComputeHighlight(props.value); 
 
     const contentEditableRef = useRef(null);
 
@@ -81,6 +81,7 @@ export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) 
             onKeyDown={onkeydown}
             className={ei.input}
             >
+                {props.defaultVal}
             </div>
             <div className={ei.highlight_container}>
                 <span>{props.value.substring(0, hl.startHl)}</span>

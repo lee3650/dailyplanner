@@ -7,7 +7,7 @@ export class EventData {
     }
 
     toString() : string {
-        return `${getTimeString(this.start, this.end)} ${this.title}`; 
+        return `${this.start.toStandardString()}-${this.end.toStandardString()} ${this.title}`; 
     }
 
     timeString() : string {
@@ -57,6 +57,11 @@ export class Time {
         }
 
         return `${hourStr}:${mins} ${meridian}`; 
+    }
+
+    toStandardString() {
+        const mins = this.minutes.toLocaleString('en-US', { minimumIntegerDigits: 2 });
+        return `${this.hours}:${mins}`;
     }
 
     static fromString(val : string) : Time

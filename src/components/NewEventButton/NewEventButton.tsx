@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import ne from './NewEventButton.module.css'
-import { ComputeHighlight } from "../../model/Parser";
 import { EventInput, EventInputProps } from "../EventInput/EventInput";
 
 export class NewEventButtonProps {
     constructor(public editing : boolean, public onSubmit : (value : string) => void,
-     public onCancel : () => void, public onClick : () => void, public onChange : (valid : boolean) => void)
+     public onCancel : () => void, public onClick : () => void)
     {
 
     }
@@ -15,17 +14,13 @@ const NewEventButton : React.FC<NewEventButtonProps> = ( props : NewEventButtonP
     const [value, setValue] = useState(''); 
 
     const onchange = (val : string) => {
-        const parsed = ComputeHighlight(val); 
-
         setValue(val); 
-
-        props.onChange(parsed.valid); 
     } 
 
     return (
         <div className={ne.addNew}>
             {props.editing ? 
-            (<EventInput {...new EventInputProps(value, onchange, props.onSubmit, props.onCancel)}></EventInput>)
+            (<EventInput {...new EventInputProps(value, onchange, props.onSubmit, props.onCancel, '')}></EventInput>)
             : (<p onClick={() => { setValue(''); props.onClick(); }}>+ new event</p>)}
         </div>)
 }
