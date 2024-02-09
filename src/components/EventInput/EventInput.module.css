@@ -1,0 +1,71 @@
+.input_container {
+  font-family: 'Roboto', 'sans-serif';
+  border-radius: 4px;
+  height: 2rem;
+  font-size: 1.15em;
+  position: relative; 
+  color: var(--text-color); 
+  height: 100%; 
+  --padding: 4px; 
+}
+
+.input {
+  border: 1px solid gray;
+  padding: var(--padding); 
+  border-radius: 5px; 
+}
+
+/* todo: do we want this? */
+.input:focus {
+  outline: none; 
+}
+
+.button {
+  width: 70px; 
+  height: 30px; 
+  border: none;
+  margin-right: 5px; 
+  margin-top: 5px; 
+  font-size: 0.75em; 
+  border-radius: 5px;
+  color: var(--text-color); 
+  background-color: var(--cancel-button-color);
+}
+
+.button:hover {
+  cursor: pointer; 
+}
+
+.button.submit {
+  background-color: var(--submit-button-color);
+}
+
+.button:active {
+  transform: translateY(2px); 
+}
+
+.button.submit:disabled {
+  cursor: not-allowed;
+  background-color: var(--submit-button-disabled);
+}
+
+.button.submit:disabled:active {
+  transform: translateX(2px); 
+}
+
+.highlight_container {
+  width: auto;
+  color: rgba(1, 1, 1, 0); 
+  opacity: 0.20;
+  position: absolute; 
+  white-space: pre;
+  user-select: none;
+  top: 0; 
+  z-index: 1;
+  pointer-events: none;
+  padding: var(--padding); 
+}
+
+.highlight {
+  background-color: var(--text-highlight-color);
+}

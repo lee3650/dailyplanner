@@ -1,37 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import WorkingArea from './components/WorkingArea'
+import { EventData, Time } from './model/EventData';
+
+const test_data = [
+    new EventData("wraparound event", new Time(11, 10), new Time(12, 30)), 
+    new EventData("test event 2", new Time(13, 30), new Time(14, 0)), 
+    new EventData("test event 3", new Time(15, 20), new Time(15, 40)), 
+    new EventData("test event", new Time(13, 10), new Time(13, 30)), 
+    new EventData("midnight event", new Time(0, 10), new Time(1, 30)), 
+]; 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
+    <div>
+      <WorkingArea data={test_data}>
 
-      </div>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        So, this should hot reload? 
-      </p>
-    </>
+      </WorkingArea>
+    </div>
   )
 }
 
