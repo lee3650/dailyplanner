@@ -1,5 +1,6 @@
 import './App.css'
 import WorkingArea from './components/WorkingArea'
+import { EventDisplay, EventDisplayProps } from './components/EventDisplay/EventDisplay';
 import { EventData, Time } from './model/EventData';
 
 const test_data = [
@@ -14,9 +15,12 @@ function App() {
 
   return (
     <div>
+      {/*
       <WorkingArea data={test_data}>
 
       </WorkingArea>
+      */}
+      <EventDisplay {...new EventDisplayProps(test_data)}></EventDisplay>
     </div>
   )
 }

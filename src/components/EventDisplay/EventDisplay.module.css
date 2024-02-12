@@ -1,0 +1,35 @@
+.container {
+    width: 90%; 
+    padding-left: 10%;
+    position: relative; 
+}
+
+.container h1 {
+    padding-bottom: 30px;
+    padding-top: 30px; 
+    font-size: 2.5em;
+}
+
+.hour {
+    height: 75px; 
+    border-top: solid 1px #F2E8DC;
+    position: relative; 
+    color: #767676; 
+}
+
+.hourLine {
+    position: absolute; 
+    top: 50%;
+    height: 1px; 
+    background-color: #6B6B6B;
+    width: 100%; 
+}
+
+.hour div span {
+    position: relative;
+    top: 5px; 
+}
+
+.event {
+    width: 100%; 
+}
