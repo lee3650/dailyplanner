@@ -32,4 +32,47 @@
 
 .event {
     width: 100%; 
+    position: absolute; 
+    background-color: #1E1E1E;
+    border-top: solid 1px #767676;
+}
+
+.eventContent {
+    margin-left: 10px; 
+    padding-top: 3px;
+}
+
+.eventTimeText {
+    color: #767676; 
+    font-size: 0.9rem;
+}
+
+.eventDecor {
+    background-color: #883737; 
+    width: 5px;
+    height: 100%; 
+    position: absolute; 
+}
+
+.line {
+    height: 3px; 
+    width: 100%; 
+    background-color: #E54D4D; 
+}
+
+.lineContainer {
+    width: 100%; 
+    position: absolute; 
+    transform: translateY(-50%);
+}
+
+.lineBall {
+    width: 16px;
+    height: 16px; 
+    border-radius: 50%;
+    background-color: #E54D4D; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    transform: translate(-50%, -50%);
 }
