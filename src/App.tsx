@@ -19,7 +19,7 @@ function App() {
       <WorkingArea data={test_data}>
 
       </WorkingArea>
-      */}
+  */ }
       <EventDisplay {...new EventDisplayProps(test_data)}></EventDisplay>
     </div>
   )
