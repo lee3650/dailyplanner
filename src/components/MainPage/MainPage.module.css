@@ -1,0 +1,17 @@
+.container {
+    display: flex; 
+    flex-direction: row; 
+}
+
+.menu {
+    flex: 1; 
+    height: 92vh; 
+    overflow-y: auto;
+}
+
+.hline {
+    width: 1px; 
+    height: 95vh; 
+    background-color: #6B6B6B;
+    margin-top: 2vh;
+}
