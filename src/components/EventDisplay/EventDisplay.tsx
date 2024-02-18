@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { EventData, Time } from "../../model/EventData"
 import css from './EventDisplay.module.css'
 import { EventLine, EventLineProps } from "./EventLine";
+import { ComputeOverlapArray } from "../../model/ComputeOverlap";
 
 export class EventDisplayProps {
     constructor(public data : EventData[]) {
@@ -30,6 +31,9 @@ export const EventDisplay : React.FC<EventDisplayProps> = (props : EventDisplayP
 
     const data = props.data; 
 
+    // todo - this is really inefficient 
+    const leftArr = ComputeOverlapArray(data); 
+
     return (
         <div>
             <div className={css.container}>
@@ -40,11 +44,13 @@ export const EventDisplay : React.FC<EventDisplayProps> = (props : EventDisplayP
                         <div className={css.hourLine}></div>
                     </div>
                     )}
-                    {data.map(val =>
+                    {data.map((val, idx) =>
                         <div key={val.title + val} className={css.event}
                         style={{
                             top: `${computeTop(val.start)}px`, 
                             height: `${computeHeight(val.start, val.end)}px`,
+                            left: `${leftArr[idx]}%`,
+                            width: `${100 - leftArr[idx]}%`, 
                         }}
                         >
                             <div className={css.eventDecor}></div>

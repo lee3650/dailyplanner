@@ -12,14 +12,15 @@ export const ComputeOverlapArray = (data : EventData[]) : number[] => {
     // or we can just run that as a post-processor 
 
     const DoesOverlap = (index : number, element : EventData, data : any) : boolean => {
-        // assume sorted increasing by end time 
+        // assume sorted by increasing start time 
+        // we have to check all elements for overlap
         // we only have to check one previous element? 
 
-        index -= 1; 
-
-        if (index >= 0 && data[index].item.end.getMinutes() > element.start.getMinutes())
+        for (let i = 0; i < index; i++)
         {
-            return true; 
+            if (data[i].item.start.getMinutes() <= element.start.getMinutes() && data[i].item.end.getMinutes() > element.start.getMinutes()) {
+                return true;
+            }
         }
 
         return false; 
@@ -32,7 +33,9 @@ export const ComputeOverlapArray = (data : EventData[]) : number[] => {
         }
     }); 
 
-    const sorted = mapped.sort((a, b) => a.item.end.getMinutes() - b.item.end.getMinutes()); 
+    const sorted = mapped.sort((a, b) => a.item.start.getMinutes() - b.item.start.getMinutes()); 
+
+    const copy = [...sorted]
 
     let z = 0; 
 
@@ -56,6 +59,10 @@ export const ComputeOverlapArray = (data : EventData[]) : number[] => {
 
         z += 1; 
     }
+
+    copy.forEach(val => {
+        result[val.index] = Math.min((result[val.index]) * 33, 80); 
+    }); 
 
     return result; 
 }
