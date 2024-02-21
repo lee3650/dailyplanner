@@ -3,6 +3,7 @@ import WorkingArea from "../WorkingArea";
 import { EventDisplay, EventDisplayProps } from "../EventDisplay/EventDisplay";
 import { Time } from "../../model/EventData";
 import css from './MainPage.module.css';
+import { useState } from "react";
 
 const test_data = [
     new EventData("wraparound event", new Time(11, 10), new Time(12, 30)), 
@@ -15,15 +16,34 @@ const test_data = [
 ]; 
 
 export function MainPage() {
+
+    const [data, setData] = useState(test_data);
+
+    const addData = (val : EventData) : void => {
+        setData([...data, val]);
+    }
+
+    const updateData = (index : number, val : EventData) : void => {
+        const newar = data.slice();
+        newar[index] = val;
+        setData(newar); 
+    }
+
+    const deleteData = (index : number) : void => {
+        const newar = data.slice();
+        newar.splice(index);
+        setData(newar);
+    }
+
   return (
         <div className={css.container}>
             <div className={css.menu}>
-                <WorkingArea data={test_data}>
+                <WorkingArea data={data} addData={addData} updateData={updateData} deleteData={deleteData}>
                 </WorkingArea>
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>
-                <EventDisplay {...new EventDisplayProps(test_data)}></EventDisplay>
+                <EventDisplay {...new EventDisplayProps(data)}></EventDisplay>
             </div>
         </div>
     )

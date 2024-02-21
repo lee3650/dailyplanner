@@ -7,19 +7,20 @@ import { ParseEvent } from '../model/Parser';
 import NewEventButton, {NewEventButtonProps} from './NewEventButton/NewEventButton';
 
 export class WorkingAreaProp {
-    constructor(public data : EventData[]){
+    constructor(public data : EventData[], public addData : (val : EventData) => void, public updateData : (index : number, val : EventData) => void, public deleteData : (index : number) => void){
 
     }
 }
 
-const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
+const WorkingArea : React.FC<WorkingAreaProp> = ({ data, addData, updateData, deleteData }) => {
     const sorted = data.sort((a, b) => (60 * (a.start.hours - b.start.hours)) + (a.start.minutes - b.start.minutes))    
 
     const [editIndex, setEditIndex] = useState(-1); 
     const [addingNew, setAddingNew] = useState(false); 
 
     const OnFinishEdit = (val : string, index : number) => {
-        data[index] = ParseEvent(val).data; 
+        // probably want to call set data here? 
+        updateData(index, ParseEvent(val).data);
         console.log('finished edit!')
         setEditIndex(-1) // hm, which one gets called first? 
     }
@@ -27,11 +28,11 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data }) => {
     const OnSubmitNewEvent = (val : string) => {
         console.log(`adding new event: ${val}`)
         setAddingNew(false); 
-        // so, we can try this but it's not very react-ive 
+
         const parsed = ParseEvent(val); 
         if (parsed.success)
         {
-            data.push(new EventData(parsed.data.title, parsed.data.start, parsed.data.end)); 
+            addData(new EventData(parsed.data.title, parsed.data.start, parsed.data.end));
         }
     }
 
