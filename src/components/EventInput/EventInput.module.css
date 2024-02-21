@@ -40,6 +40,10 @@
   background-color: var(--submit-button-color);
 }
 
+.button.delete {
+  background-color: var(--delete-button-color);
+}
+
 .button:active {
   transform: translateY(2px); 
 }

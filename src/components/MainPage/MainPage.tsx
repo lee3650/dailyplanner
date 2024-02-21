@@ -31,7 +31,7 @@ export function MainPage() {
 
     const deleteData = (index : number) : void => {
         const newar = data.slice();
-        newar.splice(index);
+        newar.splice(index, 1);
         setData(newar);
     }
 

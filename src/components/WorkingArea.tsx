@@ -40,6 +40,12 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data, addData, updateData, de
         setAddingNew(false); 
     }
 
+    const onDelete = (index : number) => {
+        setEditIndex(-1); 
+        deleteData(index); 
+        console.log(`on delete index: ${index}`); 
+    }
+
     const OnClickNewEvent = () => {
         setEditIndex(-1); 
         setAddingNew(true); 
@@ -78,7 +84,7 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data, addData, updateData, de
             <h3 className={wa.eventCount}>{sorted.length} events</h3>
             <div className={wa.verticalPadding}></div>
             <div className={wa.eventContainer}>
-                {sorted.map((val, index) => (<EventListing key={computeKey(val, index)} {...new EventListingProps(val, index, editIndex == index, OnStartEdit, OnFinishEdit) }/>))}
+                {sorted.map((val, index) => (<EventListing key={computeKey(val, index)} {...new EventListingProps(val, index, editIndex == index, OnStartEdit, OnFinishEdit, onDelete) }/>))}
                 <NewEventButton {...new NewEventButtonProps(addingNew, OnSubmitNewEvent, OnCancelNewEvent, OnClickNewEvent)}></NewEventButton>
             </div>
         </div>
