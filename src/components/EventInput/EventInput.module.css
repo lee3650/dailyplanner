@@ -40,6 +40,10 @@
   background-color: var(--submit-button-color);
 }
 
+.button.delete {
+  background-color: var(--delete-button-color);
+}
+
 .button:active {
   transform: translateY(2px); 
 }
@@ -56,7 +60,7 @@
 .highlight_container {
   width: auto;
   color: rgba(1, 1, 1, 0); 
-  opacity: 0.20;
+  opacity: 0.30;
   position: absolute; 
   white-space: pre;
   user-select: none;

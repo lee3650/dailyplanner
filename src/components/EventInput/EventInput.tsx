@@ -2,9 +2,13 @@ import React, { useRef, useEffect } from "react"
 import ei from './EventInput.module.css'; 
 import { ComputeHighlight } from "../../model/Parser";
 import { HighlightResult } from "../../model/EventData";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 export class EventInputProps {
-    constructor(public value : string, public setVal : (val : string) => void, public onSubmit : (val : string) => void, public onCancel : () => void, public defaultVal : string) {
+    constructor(public value : string, public setVal : (val : string) => void,
+     public onSubmit : (val : string) => void, public onCancel : () => void,
+      public defaultVal : string, public allowDelete : boolean, public onDelete : () => void) {
 
     }
 }
@@ -90,6 +94,7 @@ export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) 
             </div>
             <button className={`${ei.button} ${ei.submit}`} disabled={!hl.valid} onClick={onSubmitClicked}>Submit</button>
             <button className={ei.button} onClick={props.onCancel}>Cancel</button>
+            {props.allowDelete ? <button className={`${ei.button} ${ei.delete}`} onClick={props.onDelete}><FontAwesomeIcon icon={faTrashCan} /></button> : <></>} 
         </div>
         )
     );

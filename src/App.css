@@ -19,6 +19,7 @@ body {
     --submit-button-color: #802a2a; 
     --submit-button-disabled: #422424; 
     --cancel-button-color: #1f1f1f; 
+    --delete-button-color: #422424; 
     margin: 0;
     height: 100vh; 
     background-color: var(--bg-color);

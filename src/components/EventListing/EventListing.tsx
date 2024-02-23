@@ -5,7 +5,9 @@ import { EventInput, EventInputProps } from '../EventInput/EventInput';
 
 export class EventListingProps {
     constructor (public eventData : EventData, public index : number, public editing : boolean,
-         public onClick : (index : number) => void, public onFinishEdit : (value : string, index : number) => void) {
+         public onClick : (index : number) => void,
+          public onFinishEdit : (value : string, index : number) => void,
+           public onDelete : (index : number) => void) {
 
     }
 }
@@ -29,9 +31,13 @@ const EventListing : React.FC<EventListingProps> = (props : EventListingProps) =
         props.onClick(props.index); 
     }
 
+    const onDelete = () => {
+        props.onDelete(props.index);
+    }
+
     return (<div className={el.container} onClick={() => {if (!props.editing) { clicked()}}}>
         {
-        props.editing ? (<EventInput {...new EventInputProps(text, setText, onFinishEdit, onCancelEdit, oldVal)}></EventInput>) : 
+        props.editing ? (<EventInput {...new EventInputProps(text, setText, onFinishEdit, onCancelEdit, oldVal, true, onDelete)}></EventInput>) : 
         (<><p className={el.eventTitle}>{data.title}</p>
         <p className={el.eventTime}>{data.timeString()}</p></>)
         }

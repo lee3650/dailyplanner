@@ -37,6 +37,15 @@ export class Time {
 
     }
 
+    static now() {
+        const cur = new Date(); 
+        return new Time(cur.getHours(), cur.getMinutes());
+    }
+
+    getMinutes() {
+        return this.hours * 60 + this.minutes; 
+    }
+
     toString() {
         const mins = this.minutes.toLocaleString('en-US', { minimumIntegerDigits: 2 });
         let meridian = 'AM'; 
