@@ -4,6 +4,7 @@ import { ComputeHighlight } from "../../model/Parser";
 import { HighlightResult } from "../../model/EventData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { MouseoverWarning } from "../MouseoverWarning/MouseoverWarning";
 
 export class EventInputProps {
     constructor(public value : string, public setVal : (val : string) => void,
@@ -95,6 +96,12 @@ export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) 
             <button className={`${ei.button} ${ei.submit}`} disabled={!hl.valid} onClick={onSubmitClicked}>Submit</button>
             <button className={ei.button} onClick={props.onCancel}>Cancel</button>
             {props.allowDelete ? <button className={`${ei.button} ${ei.delete}`} onClick={props.onDelete}><FontAwesomeIcon icon={faTrashCan} /></button> : <></>} 
+            {
+                !hl.valid ? 
+                (<div className={ei.warning}>
+                    <MouseoverWarning message={hl.error}></MouseoverWarning>
+                </div>) : (<></>)
+            }
         </div>
         )
     );
