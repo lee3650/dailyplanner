@@ -18,10 +18,10 @@ const NewEventButton : React.FC<NewEventButtonProps> = ( props : NewEventButtonP
     } 
 
     return (
-        <div className={ne.addNew}>
+        <div className={ne.addNew} onClick={() => { if (!props.editing) { setValue(''); props.onClick(); }}}>
             {props.editing ? 
             (<EventInput {...new EventInputProps(value, onchange, props.onSubmit, props.onCancel, '', false, () => {})}></EventInput>)
-            : (<p onClick={() => { setValue(''); props.onClick(); }}>+ new event</p>)}
+            : (<p>+ new event</p>)}
         </div>)
 }
 

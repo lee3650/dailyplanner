@@ -16,14 +16,14 @@ export class EventData {
 }
 
 export class ParsedEventData {
-    constructor (public success : boolean, public data : EventData) 
+    constructor (public success : boolean, public data : EventData, public error : string) 
     {
 
     }
 }
 
 export class HighlightResult {
-    constructor (public valid : boolean, public startHl : number, public endHl : number) {
+    constructor (public valid : boolean, public startHl : number, public endHl : number, public error : string) {
 
     }
 }
@@ -35,6 +35,11 @@ export class Time {
     constructor(public hours : number, public minutes : number) 
     {
 
+    }
+
+    leq(other : Time) : boolean 
+    {
+        return this.getMinutes() <= other.getMinutes(); 
     }
 
     static now() {
@@ -85,5 +90,19 @@ export class Time {
         const minutes = Number.parseInt(match[2]); 
 
         return new Time(hours, minutes); 
+    }
+
+    static validTimeString(val : string) : boolean 
+    {
+        const match = timeRegex.exec(val); 
+        if (!match)
+        {
+            throw new TypeError(`Invalid value input: ${val}`); 
+        }
+
+        const hours = Number.parseInt(match[1]); 
+        const minutes = Number.parseInt(match[2]); 
+
+        return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59; 
     }
 }

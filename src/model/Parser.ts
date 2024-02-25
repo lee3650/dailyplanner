@@ -11,31 +11,39 @@ export const ParseEvent : (val : string) => ParsedEventData = (val : string) => 
     if (!match)
     {
         console.log(`failed to parse event!`); 
-        return new ParsedEventData(false, new EventData(val, new Time(0,0), new Time(0,0))); 
+        return new ParsedEventData(false, new EventData(val, new Time(0,0), new Time(0,0)), "Missing time range! Add start and end time HH:MM-HH:MM"); 
     }
 
     const start = match[1];
     const end = match[4];
 
-    console.log(`found start and end time: ${start}, end: ${end}`); 
+    console.log(`found start and end time: ${start}, end: ${end}`);
 
-    console.log(`no groups found!`); 
     try {
-        const hl = ComputeHighlight(val); 
-        if (hl.valid)
-        {
-            const first = val.substring(0, hl.startHl); 
-            const last = val.substring(hl.endHl); 
+        let startHl, endHl = 0;
 
-            return new ParsedEventData(true, new EventData(`${first.trim()} ${last.trim()}`, Time.fromString(start), Time.fromString(end))); 
+        startHl = match.index;
+        endHl = match.index + match[0].length;
+
+        const first = val.substring(0, startHl);
+        const last = val.substring(endHl);
+
+        if (!Time.validTimeString(start) || !Time.validTimeString(end)) {
+            return new ParsedEventData(false, new EventData("", new Time(0, 0), new Time(0, 0)), "Start or end time was not valid!");
         }
-    }
-    catch (e : any)
-    {
-        return new ParsedEventData(false, new EventData(val, new Time(0,0), new Time(0,0))); 
-    }
 
-    return new ParsedEventData(false, new EventData(val, new Time(0,0), new Time(0,0))); 
+        const startTime = Time.fromString(start);
+        const endTime = Time.fromString(end);
+
+        if (endTime.leq(startTime)) {
+            return new ParsedEventData(false, new EventData("", new Time(0, 0), new Time(0, 0)), "Start time must be before end time!");
+        }
+
+        return new ParsedEventData(true, new EventData(`${first.trim()} ${last.trim()}`, startTime, endTime), "");
+    }
+    catch (e: any) {
+        return new ParsedEventData(false, new EventData(val, new Time(0, 0), new Time(0, 0)), "Failed to parse start and end time!");
+    }
 }
 
 export function ComputeHighlight(val : string) : HighlightResult {
@@ -43,8 +51,15 @@ export function ComputeHighlight(val : string) : HighlightResult {
 
     if (match) 
     {
-        return new HighlightResult(true, match.index, match.index + match[0].length); 
+        const parsed = ParseEvent(val); 
+
+        if (parsed.success)
+        {
+            return new HighlightResult(true, match.index, match.index + match[0].length, ""); 
+        }
+
+        return new HighlightResult(false, 0, 0, parsed.error); 
     }
 
-    return new HighlightResult(false, 0, 0); 
+    return new HighlightResult(false, 0, 0, "Missing start and end time! Format: HH:MM - HH:MM (military time)"); 
 }

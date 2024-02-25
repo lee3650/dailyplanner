@@ -1,0 +1,39 @@
+.container {
+    position: relative; 
+}
+
+.icon {
+    color: #8a8448; 
+}
+
+.icon:hover .panel {
+    opacity: 1;
+}
+
+.panel {
+    opacity: 0;
+    transition: opacity 0.2s ease; 
+    position: absolute; 
+    background-color: #1C1C1C;
+    border: solid 1px #767676;; 
+    color: var(--text-color);
+    right: 50%; 
+    transform: translateX(50%);
+    bottom: 175%;
+    width: 175px; 
+    font-size: 0.9rem;
+    border-radius: 5px;
+    padding: 10px; 
+    text-align: center;
+}
+
+.panel::after {
+    content: ''; 
+    position: absolute; 
+    top: 100%; 
+    left: 50%; 
+    margin-left: -10px; 
+    border-width: 10px;
+    border-style: solid;
+    border-color: #767676 transparent transparent transparent;
+}
