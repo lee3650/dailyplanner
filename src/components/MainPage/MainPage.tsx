@@ -4,6 +4,7 @@ import { EventDisplay, EventDisplayProps } from "../EventDisplay/EventDisplay";
 import { Time } from "../../model/EventData";
 import css from './MainPage.module.css';
 import { useState } from "react";
+import { TemplatePanel } from "../TemplatePanel/TemplatePanel";
 
 const test_data = [
     new EventData("wraparound event", new Time(11, 10), new Time(12, 30)), 
@@ -37,6 +38,10 @@ export function MainPage() {
 
   return (
         <div className={css.container}>
+            <div className={css.narrow_menu}>
+                <TemplatePanel/>
+            </div>
+            <div className={css.hline}></div>
             <div className={css.menu}>
                 <WorkingArea data={data} addData={addData} updateData={updateData} deleteData={deleteData}>
                 </WorkingArea>

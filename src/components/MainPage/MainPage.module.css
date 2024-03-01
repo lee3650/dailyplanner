@@ -9,6 +9,12 @@
     overflow-y: auto;
 }
 
+.narrow_menu {
+    flex: 0.45; 
+    height: 92vh; 
+    overflow-y: auto;
+}
+
 .hline {
     width: 1px; 
     height: 95vh; 

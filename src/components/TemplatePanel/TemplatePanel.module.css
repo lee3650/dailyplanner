@@ -1,0 +1,51 @@
+.container {
+    margin: 15px; 
+}
+
+.login {
+    color: #767676; 
+}
+
+.back {
+    color: var(--submit-button-color)
+}
+
+.button {
+    margin-top: 6px; 
+    margin-bottom: 6px; 
+    padding: 3px; 
+    position: relative; 
+}
+
+.button:hover {
+    background-color: var(--hover-select-color);
+    cursor: pointer; 
+    border-radius: 4px;
+}
+
+.buttonContainer {
+    margin-left: 20px;
+    width: calc(100% - 20px); 
+}
+
+.newTemplateButton {
+    color: var(--text-highlight-color); 
+    padding: 3px; 
+}
+
+.newTemplateButton:hover {
+    background-color: var(--hover-select-color);
+    cursor: pointer; 
+    border-radius: 4px;
+}
+
+.deleteTemplateBtn {
+    color: var(--submit-button-color); 
+    position: absolute; 
+    right: 5px; 
+    visibility: hidden;
+}
+
+.button:hover .deleteTemplateBtn {
+    visibility: visible;
+}
