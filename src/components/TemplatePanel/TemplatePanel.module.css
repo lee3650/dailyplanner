@@ -17,10 +17,45 @@
     position: relative; 
 }
 
+.leftClickMenu {
+    display: none;
+    background-color: var(--hover-select-color);
+    z-index: 1;
+    font-size: 0.95rem;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    border: 1px solid var(--bg-text-color); 
+}
+
+.leftClickMenu p {
+    padding: 5px;
+    margin: 3px 0 3px 0;
+    border-radius: 5px;
+}
+
+.leftClickMenu p:hover {
+    background-color: var(--cancel-button-color);
+}
+
+.leftClickMenu div {
+    width: 100%;
+    height: 1px; 
+    background-color: var(--bg-text-color); 
+}
+
+.menuActive {
+    display: block;
+    position: absolute;
+}
+
 .button:hover {
     background-color: var(--hover-select-color);
     cursor: pointer; 
     border-radius: 4px;
+}
+
+.button.buttonActive {
+    background-color: var(--hover-select-color);
 }
 
 .buttonContainer {
@@ -40,12 +75,9 @@
 }
 
 .deleteTemplateBtn {
-    color: var(--submit-button-color); 
-    position: absolute; 
-    right: 5px; 
-    visibility: hidden;
+    color: var(--text-highlight-color); 
 }
 
-.button:hover .deleteTemplateBtn {
-    visibility: visible;
+.spaceRight {
+    padding-right: 10px;
 }
