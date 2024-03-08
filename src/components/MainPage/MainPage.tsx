@@ -1,10 +1,11 @@
 import { EventData } from "../../model/EventData";
+import { Template } from "../../model/Template";
 import WorkingArea from "../WorkingArea";
 import { EventDisplay, EventDisplayProps } from "../EventDisplay/EventDisplay";
 import { Time } from "../../model/EventData";
 import css from './MainPage.module.css';
 import { useState } from "react";
-import { TemplatePanel } from "../TemplatePanel/TemplatePanel";
+import { TemplatePanel, TemplatePanelProps } from "../TemplatePanel/TemplatePanel";
 
 const test_data = [
     new EventData("wraparound event", new Time(11, 10), new Time(12, 30)), 
@@ -16,9 +17,28 @@ const test_data = [
     new EventData("midnight event", new Time(0, 10), new Time(1, 30)), 
 ]; 
 
+const weekdayData = [
+    new EventData("breakfast", new Time(7, 30), new Time(8,0)), 
+    new EventData("work", new Time(8, 30), new Time(17,0)), 
+    new EventData("workout", new Time(17,30), new Time(18,45)), 
+    new EventData("snack / shower", new Time(18,45), new Time(19,15)), 
+    new EventData("gamedev / project", new Time(19,15), new Time(20,15)), 
+    new EventData("dinner", new Time(20,15), new Time(21,0)), 
+];
+
+const tmpData = [
+    new Template(weekdayData, 'weekday'), 
+    new Template([], 'saturday'), 
+    new Template([], 'sunday'), 
+    new Template([], 'holiday'), 
+]; 
+
+const blankTemplate = new Template([], 'blank'); 
+
 export function MainPage() {
 
     const [data, setData] = useState(test_data);
+    const [template, setTemplate] = useState(blankTemplate);  
 
     const addData = (val : EventData) : void => {
         setData([...data, val]);
@@ -30,6 +50,11 @@ export function MainPage() {
         setData(newar); 
     }
 
+    const loadIntoToday = (template : Template) => {
+        setData(template.data); 
+        setTemplate(template);
+    }
+
     const deleteData = (index : number) : void => {
         const newar = data.slice();
         newar.splice(index, 1);
@@ -39,11 +64,11 @@ export function MainPage() {
   return (
         <div className={css.container}>
             <div className={css.narrow_menu}>
-                <TemplatePanel/>
+                <TemplatePanel {...new TemplatePanelProps(tmpData, loadIntoToday)}/>
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>
-                <WorkingArea data={data} addData={addData} updateData={updateData} deleteData={deleteData}>
+                <WorkingArea data={data} addData={addData} updateData={updateData} deleteData={deleteData} templateName={template.name}>
                 </WorkingArea>
             </div>
             <div className={css.hline}></div>
