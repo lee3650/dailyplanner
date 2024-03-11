@@ -4,11 +4,11 @@ import { useState } from 'react'
 import css from './TemplatePanel.module.css'
 import { faCalendar, faCircleLeft } from '@fortawesome/free-regular-svg-icons'
 import { TemplateButton, TemplateButtonProps } from './TemplateButton'
-import { NewTemplateButton } from './NewTemplateButton'
+import { NewTemplateButton, NewTemplateButtonProps } from './NewTemplateButton'
 import { Template } from '../../model/Template'
 
 export class TemplatePanelProps {
-    constructor(public data : Template[], public loadIntoToday : (template : Template) => void) {
+    constructor(public data : Template[], public loadIntoToday : (template : Template) => void, public addTemplate : (toAdd : Template) => void) {
 
     }
 }
@@ -48,6 +48,18 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
         props.loadIntoToday(templates[index]); 
     }
 
+    function getNextId() {
+        return props.data.reduce((acc, current) => acc.id > current.id ? acc : current, new Template([], 'blank', 0)).id + 1; 
+    }
+
+    const addNewTemplate = (name : string) => {
+        const next = new Template([], name, getNextId()); 
+        // this function should also load that template 
+        props.addTemplate(next); 
+        // TODO 
+        props.loadIntoToday(next); 
+    }
+
     return (
         <div className={css.container} onClick={clickOff}>
             <FontAwesomeIcon icon={faCircleLeft} className={css.back}></FontAwesomeIcon>
@@ -58,7 +70,7 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
                 {templates.map((val, index) => 
                     <TemplateButton key={`${val.name}${index}`} {...new TemplateButtonProps(val.name, index, onClicked, selectedIndex, onLoad)}/>
                 )}
-                <NewTemplateButton/>
+                <NewTemplateButton {...new NewTemplateButtonProps(addNewTemplate)}/>
             </div>
         </div>
     )

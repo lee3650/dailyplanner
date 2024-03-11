@@ -95,3 +95,40 @@
 .spaceRight {
     padding-right: 10px;
 }
+
+.newTemplateInput {
+    background-color: var(--bg-color); 
+    color: var(--text-color); 
+    border-radius: 5px;
+    padding: 3px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.submitButton {
+    padding: 5px; 
+    background-color: var(--submit-button-color);
+    border-radius: 5px; 
+    font-family: inherit;
+    color: var(--text-color);
+    border: none; 
+    margin: 5px 5px 5px 0; 
+    border-width: 1px;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.cancelButton {
+    padding: 5px; 
+    background-color: var(--cancel-button-color);
+    color: var(--text-color);
+    border-radius: 5px; 
+    border: none; 
+    font-family: inherit;
+}
+
+.newTemplateInput:focus {
+    outline: none;
+}

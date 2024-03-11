@@ -27,21 +27,26 @@ const weekdayData = [
 ];
 
 const tmpData = [
-    new Template(weekdayData, 'weekday'), 
-    new Template([], 'saturday'), 
-    new Template([], 'sunday'), 
-    new Template([], 'holiday'), 
+    new Template(weekdayData, 'weekday', 0), 
+    new Template([], 'saturday', 1), 
+    new Template([], 'sunday', 2), 
+    new Template([], 'holiday', 3), 
 ]; 
 
-const blankTemplate = new Template([], 'blank'); 
+const blankTemplate = new Template([], 'blank', 4); 
 
 export function MainPage() {
 
     const [data, setData] = useState(test_data);
     const [template, setTemplate] = useState(blankTemplate);  
+    const [templates, setTemplates] = useState(tmpData); 
 
     const addData = (val : EventData) : void => {
         setData([...data, val]);
+    }
+
+    const addTemplate = (val : Template) => {
+        setTemplates([...templates, val]); 
     }
 
     const updateData = (index : number, val : EventData) : void => {
@@ -64,7 +69,7 @@ export function MainPage() {
   return (
         <div className={css.container}>
             <div className={css.narrow_menu}>
-                <TemplatePanel {...new TemplatePanelProps(tmpData, loadIntoToday)}/>
+                <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate)}/>
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>
