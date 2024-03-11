@@ -7,16 +7,6 @@ import css from './MainPage.module.css';
 import { useState } from "react";
 import { TemplatePanel, TemplatePanelProps } from "../TemplatePanel/TemplatePanel";
 
-const test_data = [
-    new EventData("wraparound event", new Time(11, 10), new Time(12, 30)), 
-    new EventData("overlap event", new Time(11, 25), new Time(12, 50)), 
-    new EventData("another overlap", new Time(12, 25), new Time(13, 0)), 
-    new EventData("test event 2", new Time(13, 30), new Time(14, 0)), 
-    new EventData("test event 3", new Time(15, 20), new Time(15, 40)), 
-    new EventData("test event", new Time(13, 10), new Time(13, 30)), 
-    new EventData("midnight event", new Time(0, 10), new Time(1, 30)), 
-]; 
-
 const weekdayData = [
     new EventData("breakfast", new Time(7, 30), new Time(8,0)), 
     new EventData("work", new Time(8, 30), new Time(17,0)), 
@@ -40,6 +30,15 @@ const blankTemplate = new Template([], 'blank', BLANK_ID);
 const todayTemplate = new Template([], 'today', TODAY_ID); 
 
 export function MainPage() {
+    /*
+    Todo: 
+
+    No more modes / separation between today and template. 
+    Only store template_id as state. Fetch and set entire contents of data
+    On each update. 
+
+    */
+
     const [ todayMode, setTodayMode ] = useState(true); 
     const [data, setData] = useState<EventData[]>([]);
     const [today, setToday] = useState(todayTemplate)
