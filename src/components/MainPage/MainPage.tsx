@@ -33,31 +33,44 @@ const tmpData = [
     new Template([], 'holiday', 3), 
 ]; 
 
-const blankTemplate = new Template([], 'blank', 4); 
+const TODAY_ID = -2; 
+const BLANK_ID = -1; 
+
+const blankTemplate = new Template([], 'blank', BLANK_ID); 
+const todayTemplate = new Template([], 'today', TODAY_ID); 
 
 export function MainPage() {
-
-    const [data, setData] = useState(test_data);
+    const [ todayMode, setTodayMode ] = useState(true); 
+    const [data, setData] = useState<EventData[]>([]);
+    const [today, setToday] = useState(todayTemplate)
     const [template, setTemplate] = useState(blankTemplate);  
     const [templates, setTemplates] = useState(tmpData); 
 
+    // this is add an event to either the 'today' view or the current template 
     const addData = (val : EventData) : void => {
         setData([...data, val]);
+        template.data = data; 
     }
 
     const addTemplate = (val : Template) => {
         setTemplates([...templates, val]); 
+        setData(val.data); 
+        setTemplate(val); 
+        setTodayMode(false); 
     }
 
     const updateData = (index : number, val : EventData) : void => {
         const newar = data.slice();
         newar[index] = val;
         setData(newar); 
+        template.data = data; 
     }
 
     const loadIntoToday = (template : Template) => {
         setData(template.data); 
         setTemplate(template);
+        setToday(new Template(template.data, 'today', TODAY_ID)); 
+        setTodayMode(true); 
     }
 
     const deleteData = (index : number) : void => {
@@ -66,14 +79,30 @@ export function MainPage() {
         setData(newar);
     }
 
+    const editTemplate = (index : number) => {
+        const next = templates[index]; 
+
+        setTemplate(next); 
+        setTodayMode(false); 
+        setData(next.data); 
+    }
+
+    const viewToday = () => {
+        loadIntoToday(today); 
+    }
+
+    const deleteTemplate = (index : number) => {
+
+    }
+
   return (
         <div className={css.container}>
             <div className={css.narrow_menu}>
-                <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate)}/>
+                <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday)}/>
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>
-                <WorkingArea data={data} addData={addData} updateData={updateData} deleteData={deleteData} templateName={template.name}>
+                <WorkingArea data={data} addData={addData} updateData={updateData} deleteData={deleteData} templateName={template.name} todayMode={todayMode}>
                 </WorkingArea>
             </div>
             <div className={css.hline}></div>

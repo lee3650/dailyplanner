@@ -37,7 +37,7 @@ export const EventDisplay : React.FC<EventDisplayProps> = (props : EventDisplayP
     return (
         <div>
             <div className={css.container}>
-                <h1>today</h1>
+                <h1>calendar</h1>
                 <div style={{position: 'relative', }}>
                     {hours.map(val => <div key={val} className={css.hour}>
                         <div><span>{new Time(val, 0).toString()}</span></div>

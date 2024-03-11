@@ -8,7 +8,8 @@ import { NewTemplateButton, NewTemplateButtonProps } from './NewTemplateButton'
 import { Template } from '../../model/Template'
 
 export class TemplatePanelProps {
-    constructor(public data : Template[], public loadIntoToday : (template : Template) => void, public addTemplate : (toAdd : Template) => void) {
+    constructor(public data : Template[], public loadIntoToday : (template : Template) => void, public addTemplate : (toAdd : Template) => void, 
+    public deleteTemplate : (index : number) => void, public editTemplate : (index : number) => void, public viewToday : () => void) {
 
     }
 }
@@ -56,19 +57,35 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
         const next = new Template([], name, getNextId()); 
         // this function should also load that template 
         props.addTemplate(next); 
-        // TODO 
-        props.loadIntoToday(next); 
+    }
+
+    const onEdit = (val : number) => {
+        clickOff(); 
+        props.editTemplate(val); 
+    }
+
+    const onDelete = (val : number) => {
+        clickOff(); 
+        props.deleteTemplate(val); 
+    }
+
+    const onDuplicate = (val : number) => {
+
+    }
+
+    const onClickToday = () => {
+        props.viewToday(); 
     }
 
     return (
         <div className={css.container} onClick={clickOff}>
             <FontAwesomeIcon icon={faCircleLeft} className={css.back}></FontAwesomeIcon>
             <p className={css.login}>login</p>
-            <h2 className={css.todayButton}><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon> today</h2>
+            <h2 onClick={onClickToday} className={css.todayButton}><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon> today</h2>
             <h1>templates</h1>
             <div className={css.buttonContainer}>
                 {templates.map((val, index) => 
-                    <TemplateButton key={`${val.name}${index}`} {...new TemplateButtonProps(val.name, index, onClicked, selectedIndex, onLoad)}/>
+                    <TemplateButton key={`${val.name}${index}`} {...new TemplateButtonProps(val.name, index, onClicked, selectedIndex, onLoad, onEdit)}/>
                 )}
                 <NewTemplateButton {...new NewTemplateButtonProps(addNewTemplate)}/>
             </div>

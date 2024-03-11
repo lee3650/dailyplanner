@@ -5,7 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan, faEdit, faCopy, faCalendar } from '@fortawesome/free-regular-svg-icons'
 
 export class TemplateButtonProps {
-    constructor(public label : string, public index : number, public clicked : (index : number) => void, public selectedIndex : number, public onLoad : (index : number) => void) {
+    constructor(public label : string, public index : number, public clicked : (index : number) => void,
+     public selectedIndex : number, public onLoad : (index : number) => void, 
+     public onEdit : (index : number) => void) {
 
     }
 }
@@ -32,7 +34,7 @@ export const TemplateButton : FC<TemplateButtonProps> = (prop : TemplateButtonPr
             <FontAwesomeIcon icon={faCopy} className={css.spaceRight}></FontAwesomeIcon>
             Duplicate
             </p>
-            <p>
+            <p onClick={() => prop.onEdit(prop.index)}>
             <FontAwesomeIcon icon={faEdit} className={css.spaceRight}></FontAwesomeIcon>
             Edit
             </p>
