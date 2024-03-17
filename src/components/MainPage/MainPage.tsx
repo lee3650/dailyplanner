@@ -112,6 +112,7 @@ export function MainPage() {
         {
             const nexttmp = next[1]; 
             const newToday = new Template(nexttmp.data, 'today', TODAY_ID); 
+            writeTemplate(newToday); 
             setTemplate(newToday);
             setTodayMode(true); 
         }
@@ -141,7 +142,7 @@ export function MainPage() {
 
     const magicLoadToday = () => {
         // todo - not really sure how this will work 
-        return todayTemplate; 
+        return fetchTemplate(TODAY_ID)[1]; 
     }
 
     const viewToday = () => {
@@ -149,7 +150,11 @@ export function MainPage() {
     }
 
     const deleteTemplate = (index : number) => {
-        // todo 
+        const newTemplates = templates.slice() 
+        newTemplates.splice(index, 1); 
+        setTemplates(newTemplates); 
+        writeTemplates(newTemplates); 
+        viewToday(); 
     }
 
   return (

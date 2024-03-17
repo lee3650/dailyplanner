@@ -6,6 +6,7 @@ import { faCalendar, faCircleLeft } from '@fortawesome/free-regular-svg-icons'
 import { TemplateButton, TemplateButtonProps } from './TemplateButton'
 import { NewTemplateButton, NewTemplateButtonProps } from './NewTemplateButton'
 import { Template } from '../../model/Template'
+import { ConfirmationPanel, ConfirmationProps } from '../ConfirmationPanel/ConfirmationPanel'
 
 export class TemplatePanelProps {
     constructor(public data : Template[], public loadIntoToday : (template : Template) => void, public addTemplate : (toAdd : Template) => void, 
@@ -16,6 +17,7 @@ export class TemplatePanelProps {
 
 export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProps) => {
     const [selectedIndex, setSelectedIndex] = useState(-1); 
+    const [toDeleteIdx, setToDeleteIdx] = useState(-1); 
 
     const onClicked = (index : number) => {
         if (index == selectedIndex)
@@ -50,6 +52,7 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
     }
 
     function getNextId() {
+        // TODO lol - get this from the server probably
         return props.data.reduce((acc, current) => acc.id > current.id ? acc : current, new Template([], 'blank', 0)).id + 1; 
     }
 
@@ -65,8 +68,18 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
     }
 
     const onDelete = (val : number) => {
+        setToDeleteIdx(val); 
+        clickOff();
+    }
+
+    const cancelDelete = () => {
+        setToDeleteIdx(-1); 
+    }
+
+    const doDelete = () => {
         clickOff(); 
-        props.deleteTemplate(val); 
+        props.deleteTemplate(toDeleteIdx); 
+        setToDeleteIdx(-1); 
     }
 
     const onDuplicate = (val : number) => {
@@ -78,16 +91,19 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
     }
 
     return (
-        <div className={css.container} onClick={clickOff}>
-            <FontAwesomeIcon icon={faCircleLeft} className={css.back}></FontAwesomeIcon>
-            <p className={css.login}>login</p>
-            <h2 onClick={onClickToday} className={css.todayButton}><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon> today</h2>
-            <h1>templates</h1>
-            <div className={css.buttonContainer}>
-                {templates.map((val, index) => 
-                    <TemplateButton key={`${val.name}${index}`} {...new TemplateButtonProps(val.name, index, onClicked, selectedIndex, onLoad, onEdit)}/>
-                )}
-                <NewTemplateButton {...new NewTemplateButtonProps(addNewTemplate)}/>
+        <div>
+            {toDeleteIdx >= 0 ? <ConfirmationPanel {...new ConfirmationProps(`Are you sure you want to delete the template "${templates[toDeleteIdx].name}"?`, "Delete", cancelDelete, doDelete)}/> : <></>}
+            <div className={css.container} onClick={clickOff}>
+                <FontAwesomeIcon icon={faCircleLeft} className={css.back}></FontAwesomeIcon>
+                <p className={css.login}>login</p>
+                <h2 onClick={onClickToday} className={css.todayButton}><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon> today</h2>
+                <h1>templates</h1>
+                <div className={css.buttonContainer}>
+                    {templates.map((val, index) =>
+                        <TemplateButton key={`${val.name}${index}`} {...new TemplateButtonProps(val.name, index, onClicked, selectedIndex, onLoad, onEdit, onDelete)} />
+                    )}
+                    <NewTemplateButton {...new NewTemplateButtonProps(addNewTemplate)} />
+                </div>
             </div>
         </div>
     )
