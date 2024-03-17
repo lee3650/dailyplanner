@@ -85,6 +85,7 @@ export const EventInput : React.FC<EventInputProps> = (props : EventInputProps) 
             defaultValue={props.value}
             onKeyDown={onkeydown}
             className={ei.input}
+            suppressContentEditableWarning={true}
             >
                 {props.defaultVal}
             </div>

@@ -16,18 +16,54 @@ const weekdayData = [
     new EventData("dinner", new Time(20,15), new Time(21,0)), 
 ];
 
-const tmpData = [
-    new Template(weekdayData, 'weekday', 0), 
-    new Template([], 'saturday', 1), 
-    new Template([], 'sunday', 2), 
-    new Template([], 'holiday', 3), 
-]; 
-
 const TODAY_ID = -2; 
 const BLANK_ID = -1; 
 
+let tmpData : Record<number, Template> = {
+    0: new Template(weekdayData, 'weekday', 0), 
+    1: new Template([], 'saturday', 1), 
+    2: new Template([], 'sunday', 2), 
+    3: new Template([], 'holiday', 3), 
+}; 
+
+function loadTemplates() : Template[] {
+    return Object.values(tmpData); 
+}
+
+function writeTemplates(templates : Template[]) {
+    const dict : Record<number, Template> = {}
+    templates.forEach(v => dict[v.id] = v); 
+    tmpData = dict;     
+}
+
+let todayTemplate = new Template([], 'today', TODAY_ID); 
 const blankTemplate = new Template([], 'blank', BLANK_ID); 
-const todayTemplate = new Template([], 'today', TODAY_ID); 
+
+function fetchTemplate(template_id : number) : [boolean, Template] {
+    if (template_id == TODAY_ID)    
+    {
+        return [true, todayTemplate]
+    }
+
+    if (tmpData.hasOwnProperty(template_id))
+    {
+        return [true, tmpData[template_id]]; 
+    }
+
+    return [false, new Template([], '', -1000)]; 
+}
+
+function writeTemplate(template : Template) {
+    if (template.id == TODAY_ID) 
+    {
+        todayTemplate = template; 
+    }
+    else 
+    {
+        tmpData[template.id] = template; 
+    }
+}
+
 
 export function MainPage() {
     /*
@@ -39,59 +75,81 @@ export function MainPage() {
 
     */
 
-    const [ todayMode, setTodayMode ] = useState(true); 
-    const [data, setData] = useState<EventData[]>([]);
-    const [today, setToday] = useState(todayTemplate)
+    const [todayMode, setTodayMode] = useState(true); 
     const [template, setTemplate] = useState(blankTemplate);  
-    const [templates, setTemplates] = useState(tmpData); 
+    // todo - this needs to sync w/ the server 
+    const [templates, setTemplates] = useState(loadTemplates()); 
 
-    // this is add an event to either the 'today' view or the current template 
     const addData = (val : EventData) : void => {
-        setData([...data, val]);
-        template.data = data; 
+        // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
+        const next = new Template([...template.data, val], template.name, template.id); 
+        setTemplate(next); 
+        writeTemplate(next);
     }
 
     const addTemplate = (val : Template) => {
-        setTemplates([...templates, val]); 
-        setData(val.data); 
+        // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
+        const next = [...templates, val]; 
+        setTemplates(next); 
         setTemplate(val); 
-        setTodayMode(false); 
+        setTodayMode(false);
+        writeTemplates(next);
     }
 
     const updateData = (index : number, val : EventData) : void => {
-        const newar = data.slice();
+        // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
+        const newar = template.data.slice();
         newar[index] = val;
-        setData(newar); 
-        template.data = data; 
+        const next = new Template(newar, template.name, template.id);
+        setTemplate(next);
+        writeTemplate(next); 
     }
 
+    // TODO - I think we need to write the current today... to the server? 
     const loadIntoToday = (template : Template) => {
-        setData(template.data); 
-        setTemplate(template);
-        setToday(new Template(template.data, 'today', TODAY_ID)); 
-        setTodayMode(true); 
+        const next : [boolean, Template] = fetchTemplate(template.id); 
+        if (next[0]) 
+        {
+            const nexttmp = next[1]; 
+            const newToday = new Template(nexttmp.data, 'today', TODAY_ID); 
+            setTemplate(newToday);
+            setTodayMode(true); 
+        }
+        else {
+            throw new Error("Failed to load into today template with id " + template.id); 
+        }
+        // todo - error handling? 
     }
 
     const deleteData = (index : number) : void => {
-        const newar = data.slice();
+        // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
+        const newar = template.data.slice();
         newar.splice(index, 1);
-        setData(newar);
+        const next = new Template(newar, template.name, template.id); 
+        setTemplate(next); 
+        writeTemplate(next);  
     }
 
     const editTemplate = (index : number) => {
-        const next = templates[index]; 
+        const next = fetchTemplate(templates[index].id); 
+        if (next[0])
+        {
+            setTemplate(next[1]); 
+            setTodayMode(false); 
+        }
+    }
 
-        setTemplate(next); 
-        setTodayMode(false); 
-        setData(next.data); 
+    const magicLoadToday = () => {
+        // todo - not really sure how this will work 
+        return todayTemplate; 
     }
 
     const viewToday = () => {
-        loadIntoToday(today); 
+        loadIntoToday(magicLoadToday()); 
     }
 
     const deleteTemplate = (index : number) => {
-
+        // todo 
     }
 
   return (
@@ -101,12 +159,12 @@ export function MainPage() {
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>
-                <WorkingArea data={data} addData={addData} updateData={updateData} deleteData={deleteData} templateName={template.name} todayMode={todayMode}>
+                <WorkingArea data={template.data} addData={addData} updateData={updateData} deleteData={deleteData} templateName={template.name} todayMode={todayMode}>
                 </WorkingArea>
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>
-                <EventDisplay {...new EventDisplayProps(data)}></EventDisplay>
+                <EventDisplay {...new EventDisplayProps(template.data)}></EventDisplay>
             </div>
         </div>
     )
