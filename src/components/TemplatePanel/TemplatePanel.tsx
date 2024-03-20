@@ -10,7 +10,8 @@ import { ConfirmationPanel, ConfirmationProps } from '../ConfirmationPanel/Confi
 
 export class TemplatePanelProps {
     constructor(public data : Template[], public loadIntoToday : (template : Template) => void, public addTemplate : (toAdd : Template) => void, 
-    public deleteTemplate : (index : number) => void, public editTemplate : (index : number) => void, public viewToday : () => void) {
+    public deleteTemplate : (index : number) => void, public editTemplate : (index : number) => void, public viewToday : () => void, 
+    public todayBlank : boolean, public onDuplicate : (index : number) => void, public getNextId : () => number) {
 
     }
 }
@@ -18,6 +19,7 @@ export class TemplatePanelProps {
 export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProps) => {
     const [selectedIndex, setSelectedIndex] = useState(-1); 
     const [toDeleteIdx, setToDeleteIdx] = useState(-1); 
+    const [toLoadIdx, setToLoadIdx] = useState(-1); 
 
     const onClicked = (index : number) => {
         if (index == selectedIndex)
@@ -48,16 +50,27 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
     const onLoad = (index : number) => {
         console.log('clicked on load!'); 
         clickOff(); 
-        props.loadIntoToday(templates[index]); 
+
+        if (props.todayBlank) 
+        {
+            props.loadIntoToday(templates[index]); 
+        }
+        else {
+            setToLoadIdx(index); 
+        }
     }
 
-    function getNextId() {
-        // TODO lol - get this from the server probably
-        return props.data.reduce((acc, current) => acc.id > current.id ? acc : current, new Template([], 'blank', 0)).id + 1; 
+    const onConfirmLoad = () => {
+        props.loadIntoToday(templates[toLoadIdx]); 
+        setToLoadIdx(-1); 
+    }
+
+    const cancelLoad = () => {
+        setToLoadIdx(-1);     
     }
 
     const addNewTemplate = (name : string) => {
-        const next = new Template([], name, getNextId()); 
+        const next = new Template([], name, props.getNextId()); 
         // this function should also load that template 
         props.addTemplate(next); 
     }
@@ -83,7 +96,8 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
     }
 
     const onDuplicate = (val : number) => {
-
+        clickOff(); 
+        props.onDuplicate(val); 
     }
 
     const onClickToday = () => {
@@ -92,6 +106,8 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
 
     return (
         <div>
+            {toLoadIdx >= 0 ? <ConfirmationPanel {...new ConfirmationProps(`Loading the template "${templates[toLoadIdx].name}"
+             will overwrite the contents of "today", are you sure you want to do this?`, "Overwrite", cancelLoad, onConfirmLoad)}/> : <></>}
             {toDeleteIdx >= 0 ? <ConfirmationPanel {...new ConfirmationProps(`Are you sure you want to delete the template "${templates[toDeleteIdx].name}"?`, "Delete", cancelDelete, doDelete)}/> : <></>}
             <div className={css.container} onClick={clickOff}>
                 <FontAwesomeIcon icon={faCircleLeft} className={css.back}></FontAwesomeIcon>
@@ -100,7 +116,7 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
                 <h1>templates</h1>
                 <div className={css.buttonContainer}>
                     {templates.map((val, index) =>
-                        <TemplateButton key={`${val.name}${index}`} {...new TemplateButtonProps(val.name, index, onClicked, selectedIndex, onLoad, onEdit, onDelete)} />
+                        <TemplateButton key={`${val.name}${index}`} {...new TemplateButtonProps(val.name, index, onClicked, selectedIndex, onLoad, onEdit, onDelete, onDuplicate)} />
                     )}
                     <NewTemplateButton {...new NewTemplateButtonProps(addNewTemplate)} />
                 </div>

@@ -96,6 +96,12 @@ export function MainPage() {
         writeTemplates(next);
     }
 
+    const duplicateTemplate = (index : number) =>
+    {
+        const next = templates[index].duplicate(getNextId()); 
+        addTemplate(next); 
+    }
+
     const updateData = (index : number, val : EventData) : void => {
         // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
         const newar = template.data.slice();
@@ -157,10 +163,15 @@ export function MainPage() {
         viewToday(); 
     }
 
+    function getNextId() {
+        // TODO lol - get this from the server probably
+        return templates.reduce((acc, current) => acc.id > current.id ? acc : current, new Template([], 'blank', 0)).id + 1; 
+    }
+
   return (
         <div className={css.container}>
             <div className={css.narrow_menu}>
-                <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday)}/>
+                <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday, magicLoadToday().data.length == 0, duplicateTemplate, getNextId)}/>
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>

@@ -7,7 +7,8 @@ import { faTrashCan, faEdit, faCopy, faCalendar } from '@fortawesome/free-regula
 export class TemplateButtonProps {
     constructor(public label : string, public index : number, public clicked : (index : number) => void,
      public selectedIndex : number, public onLoad : (index : number) => void, 
-     public onEdit : (index : number) => void, public onDelete : (index : number) => void) {
+     public onEdit : (index : number) => void, public onDelete : (index : number) => void,
+     public onDuplicate : (index : number) => void) {
 
     }
 }
@@ -30,7 +31,7 @@ export const TemplateButton : FC<TemplateButtonProps> = (prop : TemplateButtonPr
             <FontAwesomeIcon icon={faCalendar} className={css.spaceRight}></FontAwesomeIcon>
             Load into today
             </p>
-            <p>
+            <p onClick={() => prop.onDuplicate(prop.index)}>
             <FontAwesomeIcon icon={faCopy} className={css.spaceRight}></FontAwesomeIcon>
             Duplicate
             </p>

@@ -13,6 +13,10 @@ export const ConfirmationPanel : FC<ConfirmationProps> = (props : ConfirmationPr
     return (
         <div className={css.parent}>
             <div className={css.panel}>
+                <div className={css.closeBtn} onClick={props.onCancel}>
+                    <span className={`${css.line} ${css.left}`}/>
+                    <span className={`${css.line} ${css.right}`}/>
+                </div>
                 <FontAwesomeIcon icon={faCircleInfo} className={css.icon}></FontAwesomeIcon>
                 <p className={css.message}>{props.text}</p>
                 <br/>
