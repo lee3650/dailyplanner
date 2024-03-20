@@ -3,6 +3,8 @@ import { FC } from 'react'
 import css from './TemplatePanel.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan, faEdit, faCopy, faCalendar } from '@fortawesome/free-regular-svg-icons'
+import { faLetterboxd } from '@fortawesome/free-brands-svg-icons'
+import { faChalkboard, faPen } from '@fortawesome/free-solid-svg-icons'
 
 export class TemplateButtonProps {
     constructor(public label : string, public index : number, public clicked : (index : number) => void,
@@ -38,6 +40,10 @@ export const TemplateButton : FC<TemplateButtonProps> = (prop : TemplateButtonPr
             <p onClick={() => prop.onEdit(prop.index)}>
             <FontAwesomeIcon icon={faEdit} className={css.spaceRight}></FontAwesomeIcon>
             Edit
+            </p>
+            <p>
+            <FontAwesomeIcon icon={faPen} className={css.spaceRight}></FontAwesomeIcon>
+            Rename
             </p>
             <div/>
             <p className={css.deleteTemplateBtn} onClick={() => prop.onDelete(prop.index)}>

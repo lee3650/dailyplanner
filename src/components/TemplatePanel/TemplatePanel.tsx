@@ -20,6 +20,7 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
     const [selectedIndex, setSelectedIndex] = useState(-1); 
     const [toDeleteIdx, setToDeleteIdx] = useState(-1); 
     const [toLoadIdx, setToLoadIdx] = useState(-1); 
+    const [toRenameIdx, setToRenameIdx] = useState(-1); 
 
     const onClicked = (index : number) => {
         if (index == selectedIndex)
