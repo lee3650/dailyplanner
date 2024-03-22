@@ -7,12 +7,14 @@ import { ParseEvent } from '../model/Parser';
 import NewEventButton, {NewEventButtonProps} from './NewEventButton/NewEventButton';
 
 export class WorkingAreaProp {
-    constructor(public data : EventData[], public addData : (val : EventData) => void, public updateData : (index : number, val : EventData) => void, public deleteData : (index : number) => void){
+    constructor(public data : EventData[], public addData : (val : EventData) => void,
+     public updateData : (index : number, val : EventData) => void, public deleteData : (index : number) => void,
+      public templateName : string, public todayMode : boolean){
 
     }
 }
 
-const WorkingArea : React.FC<WorkingAreaProp> = ({ data, addData, updateData, deleteData }) => {
+const WorkingArea : React.FC<WorkingAreaProp> = ({ data, addData, updateData, deleteData, templateName, todayMode }) => {
     const sorted = data.sort((a, b) => (60 * (a.start.hours - b.start.hours)) + (a.start.minutes - b.start.minutes))    
 
     const [editIndex, setEditIndex] = useState(-1); 
@@ -79,8 +81,8 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data, addData, updateData, de
             onKeyDown={onKeyDown}>
         <div className={wa.padding}/>
         <div className={wa.body}>
-            <h3 className={wa.date}>{getCurDateString()}</h3>
-            <h1 className={wa.title}>template name</h1>
+            <h3 className={wa.date}>{todayMode ? getCurDateString() : "editing template:"}</h3>
+            <h1 className={wa.title}>{todayMode ? "today" : templateName}</h1>
             <h3 className={wa.eventCount}>{sorted.length} events</h3>
             <div className={wa.verticalPadding}></div>
             <div className={wa.eventContainer}>
