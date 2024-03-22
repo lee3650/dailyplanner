@@ -31,7 +31,17 @@ export const TemplateButton : FC<TemplateButtonProps> = (prop : TemplateButtonPr
         setCurrentName(e.target.value);
     }
 
+    const onKeyDownContainer = (e : any) => {
+        console.log('key down container!'); 
+        if (e.key == 'Escape')
+        {
+            prop.onCancelRename(prop.index); 
+        }
+    }
+
     const onKeyDownInInput = (e : any) => {
+        e.stopPropagation(); 
+
         if (e.key == 'Enter')
         {
             if (currentName.length > 0)
@@ -51,7 +61,7 @@ export const TemplateButton : FC<TemplateButtonProps> = (prop : TemplateButtonPr
         }
     }
 
-    return (<div className={`${css.button} ${prop.selectedIndex == prop.index ? css.buttonActive : ''}`} onClick={onclick}>
+    return (<div className={`${css.button} ${prop.selectedIndex == prop.index ? css.buttonActive : ''}`} onClick={onclick} tabIndex={9} onKeyDown={onKeyDownContainer}>
         {prop.editing ? <input defaultValue={prop.label} autoFocus onKeyDown={onKeyDownInInput} className={`${currentName.length > 0 ? css.whiteBorder : css.redBorder}`} onChange={onChange}></input> : (<span># {prop.label}</span>)}
 
         <div className={`${css.leftClickMenu} ${prop.selectedIndex == prop.index && !prop.editing ? css.menuActive : ''}`} onClick={menuClicked}>

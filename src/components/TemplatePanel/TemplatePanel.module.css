@@ -1,3 +1,7 @@
+.panel {
+    height: 100%; 
+}
+
 .container {
     padding: 15px; 
     height: 100%; 
@@ -106,6 +110,11 @@
 .newTemplateButton {
     color: var(--text-highlight-color); 
     padding: 3px; 
+}
+
+.newTemplateButton input {
+    border-width: 1px; 
+    width: 100%;
 }
 
 .newTemplateButton:hover {

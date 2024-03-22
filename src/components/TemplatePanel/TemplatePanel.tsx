@@ -125,7 +125,7 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
     }
 
     return (
-        <div>
+        <div className={css.panel}>
             {toLoadIdx >= 0 ? <ConfirmationPanel {...new ConfirmationProps(`Loading the template "${templates[toLoadIdx].name}"
              will overwrite the contents of "today", are you sure you want to do this?`, "Overwrite", cancelLoad, onConfirmLoad)}/> : <></>}
             {toDeleteIdx >= 0 ? <ConfirmationPanel {...new ConfirmationProps(`Are you sure you want to delete the template "${templates[toDeleteIdx].name}"?`, "Delete", cancelDelete, doDelete)}/> : <></>}
