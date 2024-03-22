@@ -11,7 +11,8 @@ import { ConfirmationPanel, ConfirmationProps } from '../ConfirmationPanel/Confi
 export class TemplatePanelProps {
     constructor(public data : Template[], public loadIntoToday : (template : Template) => void, public addTemplate : (toAdd : Template) => void, 
     public deleteTemplate : (index : number) => void, public editTemplate : (index : number) => void, public viewToday : () => void, 
-    public todayBlank : boolean, public onDuplicate : (index : number) => void, public getNextId : () => number) {
+    public todayBlank : boolean, public onDuplicate : (index : number) => void, public getNextId : () => number, 
+    public renameTemplate : (index : number, val : string) => void) {
 
     }
 }
@@ -21,6 +22,7 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
     const [toDeleteIdx, setToDeleteIdx] = useState(-1); 
     const [toLoadIdx, setToLoadIdx] = useState(-1); 
     const [toRenameIdx, setToRenameIdx] = useState(-1); 
+    const [editNameIdx, setEditNameIdx] = useState(-1); 
 
     const onClicked = (index : number) => {
         if (index == selectedIndex)
@@ -101,6 +103,23 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
         props.onDuplicate(val); 
     }
 
+    const onRename = (val : number) => {
+        setEditNameIdx(val); 
+    }
+
+    const onSubmitRename = (index : number, val : string) => {
+        clickOff(); 
+        setEditNameIdx(-1); 
+
+        // todo... set new name of template..
+        props.renameTemplate(index, val); 
+    }
+
+    const onCancelRename = (index : number) => {
+        setEditNameIdx(-1); 
+        clickOff(); 
+    }
+
     const onClickToday = () => {
         props.viewToday(); 
     }
@@ -117,7 +136,8 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
                 <h1>templates</h1>
                 <div className={css.buttonContainer}>
                     {templates.map((val, index) =>
-                        <TemplateButton key={`${val.name}${index}`} {...new TemplateButtonProps(val.name, index, onClicked, selectedIndex, onLoad, onEdit, onDelete, onDuplicate)} />
+                        <TemplateButton key={`${val.name}${index}`} {...new TemplateButtonProps(val.name, index, onClicked, selectedIndex, onLoad,
+                             onEdit, onDelete, onDuplicate, index == editNameIdx, onRename, onCancelRename, onSubmitRename)} />
                     )}
                     <NewTemplateButton {...new NewTemplateButtonProps(addNewTemplate)} />
                 </div>

@@ -163,6 +163,17 @@ export function MainPage() {
         viewToday(); 
     }
 
+    const renameTemplate = (index : number, newName : string) => {
+        const id = templates[index].id; 
+        const next = new Template(templates[index].data, newName, id); 
+        writeTemplate(next);  
+        setTemplates(loadTemplates()); 
+        if (template.id == id)
+        {
+            setTemplate(next); 
+        }
+    }
+
     function getNextId() {
         // TODO lol - get this from the server probably
         return templates.reduce((acc, current) => acc.id > current.id ? acc : current, new Template([], 'blank', 0)).id + 1; 
@@ -171,7 +182,8 @@ export function MainPage() {
   return (
         <div className={css.container}>
             <div className={css.narrow_menu}>
-                <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday, magicLoadToday().data.length == 0, duplicateTemplate, getNextId)}/>
+                <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday,
+                     magicLoadToday().data.length == 0, duplicateTemplate, getNextId, renameTemplate)}/>
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>

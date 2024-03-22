@@ -61,6 +61,28 @@
     background-color: var(--bg-text-color); 
 }
 
+.button input {
+    width: 100%; 
+    background-color: var(--bg-color);
+    color: var(--text-color); 
+    padding: 3px;
+    border-radius: 5px;
+    border-width: 1px;
+    font-size: 1rem;
+}
+
+.redBorder {
+    border-color: var(--submit-button-color);
+}
+
+.whiteBorder {
+    border-color: var(--text-color);
+}
+
+.button input:focus {
+    outline: none;
+}
+
 .menuActive {
     display: block;
     position: absolute;
