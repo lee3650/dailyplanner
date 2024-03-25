@@ -6,6 +6,7 @@ import { Time } from "../../model/EventData";
 import css from './MainPage.module.css';
 import { useState } from "react";
 import { TemplatePanel, TemplatePanelProps } from "../TemplatePanel/TemplatePanel";
+import { LoginPanel } from "../LoginPanel/LoginPanel";
 
 const weekdayData = [
     new EventData("breakfast", new Time(7, 30), new Time(8,0)), 
@@ -180,10 +181,12 @@ export function MainPage() {
     }
 
   return (
+    <div>
+        <LoginPanel/>
         <div className={css.container}>
             <div className={css.narrow_menu}>
                 <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday,
-                     magicLoadToday().data.length == 0, duplicateTemplate, getNextId, renameTemplate)}/>
+                    magicLoadToday().data.length == 0, duplicateTemplate, getNextId, renameTemplate)} />
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>
@@ -195,5 +198,6 @@ export function MainPage() {
                 <EventDisplay {...new EventDisplayProps(template.data)}></EventDisplay>
             </div>
         </div>
+    </div>
     )
 }

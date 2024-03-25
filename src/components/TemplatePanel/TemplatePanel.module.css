@@ -90,6 +90,7 @@
 .menuActive {
     display: block;
     position: absolute;
+    top: 110%; 
 }
 
 .button:hover {
