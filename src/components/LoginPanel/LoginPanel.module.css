@@ -8,8 +8,100 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    --login-bg-col: #1B1B1B; 
+    --logo-col: #A04040; 
+    --border-col: #7C7C7C; 
+    --button-col: #313131; 
 }
 
 .panel {
+    background-color: var(--login-bg-col);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white; 
+    width: 25em; 
+    height: 28em; 
+    border-radius: 20px;
+}
 
+.panel h1 {
+    margin: 10px;
+}
+
+.panel input {
+    padding: 9px; 
+    width: 85%; 
+    background-color: var(--login-bg-col);
+    color: white; 
+    border-color: var(--border-col);
+    border-width: 1px;
+    border-radius: 5px;
+    margin: 6px; 
+}
+
+.panel button {
+    width: 85%; 
+    font-family: inherit;
+    padding: 8px; 
+    color: white; 
+    background-color: var(--button-col);
+    outline: none; 
+    border: none; 
+    border-radius: 5px;
+    margin: 5px; 
+}
+
+.panel button:hover {
+    cursor: pointer; 
+}
+
+.panel input:focus {
+    outline: none;
+}
+
+.panel img {
+    width: 40px; 
+    height: 40px; 
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.panel img:hover {
+    cursor: pointer; 
+}
+
+.panel img:active {
+    transform: scale(0.97);
+}
+
+.panel p {
+    font-size: small;
+    margin: 10px;
+    user-select: none;
+}
+
+.panel p:hover {
+    cursor: pointer; 
+}
+
+.panel p:active { 
+    transform: scale(0.97); 
+}
+
+.panel label {
+    font-size: small;
+    color: var(--border-col)
+}
+
+.logo {
+    background-color: var(--logo-col);
+    font-size: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
