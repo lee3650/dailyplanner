@@ -1,4 +1,15 @@
 # TODO 
+## API
+
+Endpoints used / needed: 
+
+- login(email, password)
+- createAccount(email, password)
+- readTemplate(userId, templateId)
+- writeTemplate(userId, templateId)
+- readTemplates(userId, templates)
+- writeTemplates(userId, templates)
+
 ## Bugs / verification
 
 - [ ] We need some kind of verification on the `Time` class - make sure negative numbers are not input and make sure that all the values are within range (i.e., 0-23, 0-59 inclusive)

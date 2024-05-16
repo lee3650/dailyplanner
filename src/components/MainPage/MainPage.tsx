@@ -6,7 +6,7 @@ import { Time } from "../../model/EventData";
 import css from './MainPage.module.css';
 import { useState } from "react";
 import { TemplatePanel, TemplatePanelProps } from "../TemplatePanel/TemplatePanel";
-import { LoginPanel } from "../LoginPanel/LoginPanel";
+import { LoginPanel, LoginPanelProps } from "../LoginPanel/LoginPanel";
 
 const weekdayData = [
     new EventData("breakfast", new Time(7, 30), new Time(8,0)), 
@@ -76,6 +76,7 @@ export function MainPage() {
 
     */
 
+    const [userId, setUserId] = useState(-1); 
     const [todayMode, setTodayMode] = useState(true); 
     const [template, setTemplate] = useState(blankTemplate);  
     // todo - this needs to sync w/ the server 
@@ -182,7 +183,7 @@ export function MainPage() {
 
   return (
     <div>
-        <LoginPanel/>
+        {userId != -1 ? (<></>) : (<LoginPanel {...new LoginPanelProps(setUserId)}/>)}
         <div className={css.container}>
             <div className={css.narrow_menu}>
                 <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday,

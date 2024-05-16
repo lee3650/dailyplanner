@@ -22,7 +22,8 @@
     flex-direction: column;
     color: white; 
     width: 25em; 
-    height: 28em; 
+    padding-top: 20px; 
+    padding-bottom: 20px; 
     border-radius: 20px;
 }
 
