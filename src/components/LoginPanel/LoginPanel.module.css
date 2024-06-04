@@ -83,6 +83,12 @@
     user-select: none;
 }
 
+.panel small {
+    color: var(--logo-col); 
+    width: 75%; 
+    text-align: center;
+}
+
 .panel p:hover {
     cursor: pointer; 
 }

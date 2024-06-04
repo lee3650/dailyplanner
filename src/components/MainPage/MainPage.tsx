@@ -65,7 +65,6 @@ function writeTemplate(template : Template) {
     }
 }
 
-
 export function MainPage() {
     /*
     Todo: 
@@ -76,7 +75,8 @@ export function MainPage() {
 
     */
 
-    const [userId, setUserId] = useState(-1); 
+    const [userName, setUserName] = useState(''); 
+    const [userPassword, setUserPassword] = useState(''); 
     const [todayMode, setTodayMode] = useState(true); 
     const [template, setTemplate] = useState(blankTemplate);  
     // todo - this needs to sync w/ the server 
@@ -183,7 +183,7 @@ export function MainPage() {
 
   return (
     <div>
-        {userId != -1 ? (<></>) : (<LoginPanel {...new LoginPanelProps(setUserId)}/>)}
+        {userName != '' ? (<></>) : (<LoginPanel {...new LoginPanelProps((userName, password) => { setUserName(userName); setUserPassword(password); })}/>)}
         <div className={css.container}>
             <div className={css.narrow_menu}>
                 <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday,

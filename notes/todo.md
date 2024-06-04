@@ -3,12 +3,12 @@
 
 Endpoints used / needed: 
 
-- login(email, password)
-- createAccount(email, password)
-- readTemplate(userId, templateId)
-- writeTemplate(userId, templateId)
-- readTemplates(userId, templates)
-- writeTemplates(userId, templates)
+- [x] createAccount(email, password)
+- [x] login(email, password)
+- [ ] readTemplate(userId, templateId)
+- [ ] writeTemplate(userId, templateId)
+- [ ] readTemplates(userId)
+- [ ] writeTemplates(userId, templates)
 
 ## Bugs / verification
 
