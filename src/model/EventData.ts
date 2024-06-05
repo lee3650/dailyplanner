@@ -3,7 +3,7 @@ const getTimeString = (start : Time, end : Time) => {
 }
 
 export class EventData {
-    constructor(public title : string, public start : Time, public end : Time) {
+    constructor(public title : string, public start : Time, public end : Time, public id : number) {
     }
 
     toString() : string {
@@ -76,6 +76,11 @@ export class Time {
     toStandardString() {
         const mins = this.minutes.toLocaleString('en-US', { minimumIntegerDigits: 2 });
         return `${this.hours}:${mins}`;
+    }
+
+    static fromInt(val : number) : Time 
+    {
+        return new Time(Math.floor(val / 60), Math.round(val) % 60); 
     }
 
     static fromString(val : string) : Time

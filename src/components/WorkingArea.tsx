@@ -34,7 +34,7 @@ const WorkingArea : React.FC<WorkingAreaProp> = ({ data, addData, updateData, de
         const parsed = ParseEvent(val); 
         if (parsed.success)
         {
-            addData(new EventData(parsed.data.title, parsed.data.start, parsed.data.end));
+            addData(new EventData(parsed.data.title, parsed.data.start, parsed.data.end, -1));
         }
     }
 

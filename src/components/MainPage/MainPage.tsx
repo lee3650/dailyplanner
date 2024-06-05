@@ -9,12 +9,12 @@ import { TemplatePanel, TemplatePanelProps } from "../TemplatePanel/TemplatePane
 import { LoginPanel, LoginPanelProps } from "../LoginPanel/LoginPanel";
 
 const weekdayData = [
-    new EventData("breakfast", new Time(7, 30), new Time(8,0)), 
-    new EventData("work", new Time(8, 30), new Time(17,0)), 
-    new EventData("workout", new Time(17,30), new Time(18,45)), 
-    new EventData("snack / shower", new Time(18,45), new Time(19,15)), 
-    new EventData("gamedev / project", new Time(19,15), new Time(20,15)), 
-    new EventData("dinner", new Time(20,15), new Time(21,0)), 
+    new EventData("breakfast", new Time(7, 30), new Time(8,0), 0), 
+    new EventData("work", new Time(8, 30), new Time(17,0), 1), 
+    new EventData("workout", new Time(17,30), new Time(18,45), 2), 
+    new EventData("snack / shower", new Time(18,45), new Time(19,15), 3), 
+    new EventData("gamedev / project", new Time(19,15), new Time(20,15), 4), 
+    new EventData("dinner", new Time(20,15), new Time(21,0), 5), 
 ];
 
 const TODAY_ID = -2; 
@@ -75,12 +75,13 @@ export function MainPage() {
 
     */
 
-    const [userName, setUserName] = useState(''); 
+    const [userId, setUserId] = useState(-100); 
     const [userPassword, setUserPassword] = useState(''); 
+    const [userEmail, setUserEmail] = useState(''); 
     const [todayMode, setTodayMode] = useState(true); 
     const [template, setTemplate] = useState(blankTemplate);  
     // todo - this needs to sync w/ the server 
-    const [templates, setTemplates] = useState(loadTemplates()); 
+    const [templates, setTemplates] = useState([] as Template[]); 
 
     const addData = (val : EventData) : void => {
         // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
@@ -181,9 +182,40 @@ export function MainPage() {
         return templates.reduce((acc, current) => acc.id > current.id ? acc : current, new Template([], 'blank', 0)).id + 1; 
     }
 
+    function parseTemplates(data : any) : Template[]
+    {
+        console.log(`parsing templates!`)
+        const result : Template[] = []
+
+        /* @ts-ignore */
+        data.forEach(t => {
+            console.log(`parsing item: ${JSON.stringify(t)}`); 
+            const d : EventData[] = []
+            /* @ts-ignore */
+            t.events.forEach(e => d.push(new EventData(e.name, Time.fromInt(e.startTime), Time.fromInt(e.endTime), e.id))); 
+            const template = new Template(d, t.name, t.id); 
+            result.push(template); 
+        });
+
+        console.log(`parsed templates: ${JSON.stringify(result)}`)
+
+        return result; 
+    }
+
+    function onLogin(userId : number, email : string, password : string, templates : any) 
+    {
+        console.log(`received templates, logging in: ${JSON.stringify(templates)}`)
+        setUserId(userId); 
+        setUserEmail(email); 
+        setUserPassword(password); 
+        const parsedTemplates = parseTemplates(templates); 
+        setTemplates(parsedTemplates); 
+        writeTemplates(parsedTemplates); 
+    }
+
   return (
     <div>
-        {userName != '' ? (<></>) : (<LoginPanel {...new LoginPanelProps((userName, password) => { setUserName(userName); setUserPassword(password); })}/>)}
+        {userId != -100 ? (<></>) : (<LoginPanel {...new LoginPanelProps(onLogin)}/>)}
         <div className={css.container}>
             <div className={css.narrow_menu}>
                 <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday,

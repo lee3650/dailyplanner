@@ -4,7 +4,7 @@ import { GUEST_ID, LOGIN_URL } from '../constants';
 import axios from 'axios';
 
 export class LoginPanelProps {
-    constructor(public setCredentials : (username : string, password : string) => void) {
+    constructor(public onLogin : (userId : number, email : string, password : string, accountTemplates : any) => void) {
 
     }
 }
@@ -13,6 +13,14 @@ export const LoginPanel : FC<LoginPanelProps> = (props : LoginPanelProps) => {
     const [email, setEmail] = useState(''); 
     const [password, setPassword] = useState(''); 
     const [error, setError] = useState(''); 
+
+    /* @ts-ignore */
+    const loginSucceeded = (data) => 
+    {
+        console.log(JSON.stringify(data));
+        setError(''); 
+        props.onLogin(data.userId, email, password, data.templates); 
+    }
 
     const requestLogin = () => {
         const data = {
@@ -25,8 +33,8 @@ export const LoginPanel : FC<LoginPanelProps> = (props : LoginPanelProps) => {
                 Accept: "application/json", 
             }
         })
-        .then(response => console.log(JSON.stringify(response.data)))
-        .catch(reason => {console.log(JSON.stringify(reason)); setError(reason.message + ": " + reason.response.data)});  
+        .then(response => loginSucceeded(response.data))
+        .catch(reason => {console.log(JSON.stringify(reason)); setError(reason.message + (reason.response ? (": " + reason.response.data) : ""))});  
     }
 
     const requestCreateAccount = () => {
@@ -49,7 +57,7 @@ export const LoginPanel : FC<LoginPanelProps> = (props : LoginPanelProps) => {
                 <p><b>Forgot password?</b></p>
                 <label>Sign in with</label>
                 <img src='https://banner2.cleanpng.com/20180324/sww/kisspng-google-logo-g-suite-chrome-5ab6e618b3b2c3.5810634915219358967361.jpg' alt='google logo'></img>
-                <p onClick={() => props.setCredentials("", "")}><b>Or continue as guest</b></p>
+                <p onClick={() => props.onLogin(GUEST_ID, 'guest', '', [])}><b>Or continue as guest</b></p>
             </div>
         </div>
     )
