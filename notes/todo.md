@@ -5,10 +5,14 @@ Endpoints used / needed:
 
 - [x] createAccount(email, password)
 - [x] login(email, password)
-- [ ] readTemplate(userId, templateId)
-- [ ] writeTemplate(userId, templateId)
-- [ ] readTemplates(userId)
-- [ ] writeTemplates(userId, templates)
+- [x] readTemplate(userId, templateId)
+- [x] writeTemplate(userId, templateId)
+- [x] readTemplates(userId)
+- [x] writeTemplates(userId, templates)
+
+### Issues
+
+- [ ] The error when the email or password is wrong is very unclear. It says like 'login failed' or something, it should say "invalid email or password" 
 
 ## Bugs / verification
 
