@@ -2,9 +2,10 @@ import { FC, useState } from 'react'
 import css from './LoginPanel.module.css'
 import { GUEST_ID, LOGIN_URL } from '../constants';
 import axios from 'axios';
+import { Template } from '../../model/Template';
 
 export class LoginPanelProps {
-    constructor(public onLogin : (userId : number, email : string, password : string, accountTemplates : any) => void) {
+    constructor(public onLogin : (userId : number, email : string, password : string, accountTemplates : any, todayTemplate : Template) => void) {
 
     }
 }

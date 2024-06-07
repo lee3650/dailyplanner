@@ -22,21 +22,25 @@ export function MainPage() {
     const [template, setTemplate] = useState(blankTemplate);  
     // todo - this needs to sync w/ the server 
     const [templates, setTemplates] = useState([] as Template[]); 
+    const [todayTemplate, setTodayTemplate] = useState(new Template([], 'today', TODAY_ID))
 
     const addData = (val : EventData) : void => {
         // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
         // const next = new Template([...template.data, val], template.name, template.id); 
-        const next = serverAddEventData(new Account(userId, userPassword), template.id, val)
-        setTemplate(next); 
+        serverAddEventData(new Account(userId, userPassword), template.id, val)
+        .then(result => setTemplate(result)); 
     }
 
     const addTemplate = (name : string) => {
         // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
         // const next = [...templates, val]; 
-        const val = serverAddTemplate(new Account(userId, userPassword), name, [])
-        setTemplate(val); 
-        setTodayMode(false);
-        setTemplates(loadTemplates(new Account(userId, userPassword)));
+        serverAddTemplate(new Account(userId, userPassword), name, [])
+        .then(result => {
+            setTemplate(result); 
+            setTodayMode(false);
+            loadTemplates(new Account(userId, userPassword))
+            .then(val => setTemplates(val)); 
+        })
     }
 
     const duplicateTemplate = (index : number) =>
@@ -50,25 +54,22 @@ export function MainPage() {
 
     const updateData = (index : number, val : EventData) : void => {
         // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
-        const next = serverUpdateEventData(new Account(userId, userPassword), template.id, val)
-        setTemplate(next);
+        serverUpdateEventData(new Account(userId, userPassword), template.id, val)
+        .then(next => setTemplate(next)); 
     }
 
     // TODO - I think we need to write the current today... to the server? 
     const loadIntoToday = (template : Template) => {
-        const next : [boolean, Template] = fetchTemplate(new Account(userId, userPassword), template.id); 
-        if (next[0]) 
-        {
-            const nexttmp = next[1]; 
-            const newToday = new Template(nexttmp.data, 'today', TODAY_ID); 
+        fetchTemplate(new Account(userId, userPassword), template.id)
+        .then(value => {
+            const newToday = new Template(value.data, 'today', TODAY_ID); 
             writeTemplate(new Account(userId, userPassword), newToday); 
             setTemplate(newToday);
             setTodayMode(true); 
-        }
-        else {
+        })
+        .catch(reason => {
             throw new Error("Failed to load into today template with id " + template.id); 
-        }
-        // todo - error handling? 
+        })
     }
 
     const deleteData = (index : number) : void => {
@@ -81,25 +82,21 @@ export function MainPage() {
     }
 
     const editTemplate = (index : number) => {
-        const next = fetchTemplate(new Account(userId, userPassword), templates[index].id); 
-        if (next[0])
-        {
-            setTemplate(next[1]); 
+        fetchTemplate(new Account(userId, userPassword), templates[index].id)
+        .then(template => {
+            setTemplate(template); 
             setTodayMode(false); 
-        }
-    }
-
-    const magicLoadToday = () => {
-        // todo - not really sure how this will work 
-        return fetchTemplate(new Account(userId, userPassword), TODAY_ID)[1]; 
+        })
     }
 
     const viewToday = () => {
-        loadIntoToday(magicLoadToday()); 
+        fetchTemplate(new Account(userId, userPassword), TODAY_ID)
+        .then(template => loadIntoToday(template))
     }
 
     const deleteTemplate = (id : number) => {
-        setTemplates(serverDeleteTemplate(new Account(userId, userPassword), id)); 
+        serverDeleteTemplate(new Account(userId, userPassword), id)
+        .then(result => setTemplates(result)); 
         viewToday(); 
     }
 
@@ -115,7 +112,7 @@ export function MainPage() {
         }
     }
 
-    function onLogin(userId : number, email : string, password : string, templates : any) 
+    function onLogin(userId : number, email : string, password : string, templates : any, todayTemplate : Template) 
     {
         console.log(`received templates, logging in: ${JSON.stringify(templates)}`)
         setUserId(userId); 
@@ -123,6 +120,7 @@ export function MainPage() {
         setUserPassword(password); 
         const parsedTemplates = parseTemplates(templates); 
         setTemplates(parsedTemplates); 
+        setTodayTemplate(todayTemplate) 
     }
 
   return (
@@ -131,7 +129,7 @@ export function MainPage() {
         <div className={css.container}>
             <div className={css.narrow_menu}>
                 <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday,
-                    magicLoadToday().data.length == 0, duplicateTemplate, renameTemplate)} />
+                    todayTemplate.data.length == 0, duplicateTemplate, renameTemplate)} />
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>
