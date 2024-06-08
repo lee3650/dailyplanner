@@ -93,7 +93,7 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
 
     const doDelete = () => {
         clickOff(); 
-        props.deleteTemplate(toDeleteIdx); 
+        props.deleteTemplate(templates[toDeleteIdx].id); 
         setToDeleteIdx(-1); 
     }
 

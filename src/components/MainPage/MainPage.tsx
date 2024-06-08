@@ -7,7 +7,7 @@ import css from './MainPage.module.css';
 import { useState } from "react";
 import { TemplatePanel, TemplatePanelProps } from "../TemplatePanel/TemplatePanel";
 import { LoginPanel, LoginPanelProps } from "../LoginPanel/LoginPanel";
-import { TODAY_ID, BLANK_ID, GUEST_ID } from "../constants";
+import { TODAY_ID, BLANK_ID, GUEST_ID, UNINIT_ID } from "../constants";
 import { serverAddTemplate, serverAddEventData, serverDeleteTemplate, serverUpdateEventData, loadTemplates, writeTemplate, fetchTemplate, parseTemplates } from "../api";
 import { Account } from "../../model/Account";
 
@@ -15,7 +15,7 @@ const blankTemplate = new Template([], 'blank', BLANK_ID);
 
 export function MainPage() {
 
-    const [userId, setUserId] = useState(GUEST_ID); 
+    const [userId, setUserId] = useState(UNINIT_ID); 
     const [userPassword, setUserPassword] = useState(''); 
     const [userEmail, setUserEmail] = useState(''); 
     const [todayMode, setTodayMode] = useState(true); 
@@ -34,7 +34,8 @@ export function MainPage() {
     const addTemplate = (name : string) => {
         // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
         // const next = [...templates, val]; 
-        serverAddTemplate(new Account(userId, userPassword), name, [])
+        console.log(`adding template with name ${name}!`)
+        serverAddTemplate(new Account(userId, userPassword), name)
         .then(result => {
             setTemplate(result); 
             setTodayMode(false);
@@ -95,9 +96,10 @@ export function MainPage() {
     }
 
     const deleteTemplate = (id : number) => {
+        console.log(`deleting index with id ${id}!`)
         serverDeleteTemplate(new Account(userId, userPassword), id)
         .then(result => setTemplates(result)); 
-        viewToday(); 
+        // .then(() => viewToday()) 
     }
 
     const renameTemplate = (index : number, newName : string) => {
@@ -125,7 +127,7 @@ export function MainPage() {
 
   return (
     <div>
-        {userId != -100 ? (<></>) : (<LoginPanel {...new LoginPanelProps(onLogin)}/>)}
+        {userId == UNINIT_ID ? (<LoginPanel {...new LoginPanelProps(onLogin)}/>) : (<></>) }
         <div className={css.container}>
             <div className={css.narrow_menu}>
                 <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday,
