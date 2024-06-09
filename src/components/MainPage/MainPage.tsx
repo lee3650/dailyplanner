@@ -8,7 +8,7 @@ import { useState } from "react";
 import { TemplatePanel, TemplatePanelProps } from "../TemplatePanel/TemplatePanel";
 import { LoginPanel, LoginPanelProps } from "../LoginPanel/LoginPanel";
 import { TODAY_ID, BLANK_ID, GUEST_ID, UNINIT_ID } from "../constants";
-import { serverAddTemplate, serverAddEventData, serverDeleteTemplate, serverUpdateEventData, loadTemplates, writeTemplate, fetchTemplate, parseTemplates } from "../api";
+import { serverAddTemplate, serverAddEventData, serverDeleteTemplate, serverUpdateEventData, loadTemplates, writeTemplate, fetchTemplate, parseTemplates, serverLoadIntoToday } from "../api";
 import { Account } from "../../model/Account";
 
 const blankTemplate = new Template([], 'blank', BLANK_ID); 
@@ -59,12 +59,10 @@ export function MainPage() {
         .then(next => setTemplate(next)); 
     }
 
-    // TODO - I think we need to write the current today... to the server? 
     const loadIntoToday = (template : Template) => {
-        fetchTemplate(new Account(userId, userPassword), template.id)
+        serverLoadIntoToday(new Account(userId, userPassword), template.id)
         .then(value => {
             const newToday = new Template(value.data, 'today', TODAY_ID); 
-            writeTemplate(new Account(userId, userPassword), newToday); 
             setTemplate(newToday);
             setTodayMode(true); 
         })

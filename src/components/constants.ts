@@ -9,6 +9,7 @@ export const readTemplateUrl = (id : number) => BASE_URL + `readTemplate/${id}`
 export const READ_TEMPLATES_URL = BASE_URL + 'readTemplates' 
 export const ADD_TEMPLATE_URL = BASE_URL + 'addTemplate'
 export const deleteTemplateUrl = (id : number) => BASE_URL + `deleteTemplate/${id}`
+export const loadIntoTodayUrl = (templateId : number) => BASE_URL + `loadIntoToday/${templateId}`
 
 export const WRITE_TEMPLATE_URL = BASE_URL + 'writeTemplate'
 export const ADD_EVENT_DATA_URL = BASE_URL + 'addEvent'; 
