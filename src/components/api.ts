@@ -1,7 +1,7 @@
 import { Account } from "../model/Account";
 import { EventData, Time } from "../model/EventData";
 import { Template } from "../model/Template";
-import { ADD_EVENT_DATA_URL, ADD_TEMPLATE_URL, LOAD_INTO_TODAY_URL, READ_TEMPLATES_URL, TODAY_ID, UPDATE_EVENT_DATA_URL, WRITE_TEMPLATE_URL, deleteTemplateUrl, readTemplateUrl } from "./constants";
+import { ADD_EVENT_DATA_URL, ADD_TEMPLATE_URL, READ_TEMPLATES_URL, TODAY_ID, UPDATE_EVENT_DATA_URL, deleteEventUrl, deleteTemplateUrl, loadIntoTodayUrl, readTemplateUrl, renameTemplateUrl } from "./constants";
 import axios from "axios";
 
 export function serverAddEventData(account : Account, templateId : number, data : EventData) : Promise<Template>
@@ -15,9 +15,15 @@ export function serverAddEventData(account : Account, templateId : number, data 
 
 export function serverLoadIntoToday(account : Account, toLoadId : number) : Promise<Template>
 {
-    return axios.post(LOAD_INTO_TODAY_URL, {
+    return axios.post(loadIntoTodayUrl(toLoadId), {
         templateId: toLoadId, 
     }, getHeaders(account))
+    .then(response => parseTemplate(response.data))
+}
+
+export function serverDeleteEvent(account : Account, eventId : number) : Promise<Template>
+{
+    return axios.delete(deleteEventUrl(eventId), getHeaders(account))
     .then(response => parseTemplate(response.data))
 }
 
@@ -75,12 +81,10 @@ export function parseTemplates(data : any) : Template[]
     return result; 
 }
 
-export async function writeTemplate(account: Account, template: Template): Promise<Template> {
-    const data = await axios.post((WRITE_TEMPLATE_URL), {
-        id: template.id,
-        owner: account.id,
-        name: template.name,
-        events: template.data,
+export async function serverRenameTemplate(account : Account, id : number, newName : string) : Promise<Template>
+{
+    const data = await axios.post(renameTemplateUrl(id), {
+        newName
     },
         getHeaders(account)
     )

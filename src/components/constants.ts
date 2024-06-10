@@ -10,10 +10,10 @@ export const READ_TEMPLATES_URL = BASE_URL + 'readTemplates'
 export const ADD_TEMPLATE_URL = BASE_URL + 'addTemplate'
 export const deleteTemplateUrl = (id : number) => BASE_URL + `deleteTemplate/${id}`
 export const loadIntoTodayUrl = (templateId : number) => BASE_URL + `loadIntoToday/${templateId}`
+export const deleteEventUrl = (id : number) => BASE_URL + `deleteEvent/${id}`;
 
-export const WRITE_TEMPLATE_URL = BASE_URL + 'writeTemplate'
+export const renameTemplateUrl = (id : number) => BASE_URL + `renameTemplate/${id}`
 export const ADD_EVENT_DATA_URL = BASE_URL + 'addEvent'; 
 export const UPDATE_EVENT_DATA_URL = BASE_URL + 'updateEvent'; 
 
-export const TODAY_ID = -2; 
-export const BLANK_ID = -1; 
+export const TODAY_ID = -1; 

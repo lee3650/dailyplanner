@@ -7,11 +7,11 @@ import css from './MainPage.module.css';
 import { useState } from "react";
 import { TemplatePanel, TemplatePanelProps } from "../TemplatePanel/TemplatePanel";
 import { LoginPanel, LoginPanelProps } from "../LoginPanel/LoginPanel";
-import { TODAY_ID, BLANK_ID, GUEST_ID, UNINIT_ID } from "../constants";
-import { serverAddTemplate, serverAddEventData, serverDeleteTemplate, serverUpdateEventData, loadTemplates, writeTemplate, fetchTemplate, parseTemplates, serverLoadIntoToday } from "../api";
+import { TODAY_ID, GUEST_ID, UNINIT_ID } from "../constants";
+import { serverAddTemplate, serverAddEventData, serverDeleteTemplate, serverUpdateEventData, loadTemplates, fetchTemplate, parseTemplates, serverLoadIntoToday, serverRenameTemplate, serverDeleteEvent } from "../api";
 import { Account } from "../../model/Account";
 
-const blankTemplate = new Template([], 'blank', BLANK_ID); 
+const blankTemplate = new Template([], 'blank', -10); 
 
 export function MainPage() {
 
@@ -67,17 +67,21 @@ export function MainPage() {
             setTodayMode(true); 
         })
         .catch(reason => {
-            throw new Error("Failed to load into today template with id " + template.id); 
+            throw new Error(`Failed to load template into today id=${template.id}, reason=${JSON.stringify(reason)}`); 
         })
     }
 
     const deleteData = (index : number) : void => {
         // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
-        const newar = template.data.slice();
-        newar.splice(index, 1);
-        const next = new Template(newar, template.name, template.id); 
-        setTemplate(next); 
-        writeTemplate(new Account(userId, userPassword), next); 
+        const id = template.data[index].id; 
+        serverDeleteEvent(new Account(userId, userPassword), id)
+        .then(result => {
+            if (result.id !== template.id && template.id !== TODAY_ID)
+            {
+                throw new Error("Modified the wrong template when deleting event!"); 
+            }
+            setTemplate(result);
+        }); 
     }
 
     const editTemplate = (index : number) => {
@@ -102,17 +106,18 @@ export function MainPage() {
 
     const renameTemplate = (index : number, newName : string) => {
         const id = templates[index].id; 
-        const next = new Template(templates[index].data, newName, id); 
-        writeTemplate(new Account(userId, userPassword), next);  
-        templates[index] = next;
-        setTemplates(templates.slice())
-        if (template.id == id)
-        {
-            setTemplate(next); 
-        }
+        serverRenameTemplate(new Account(userId, userPassword), id, newName)
+            .then(result => {
+                templates[index] = result;
+                setTemplates(templates.slice())
+                if (template.id == id) {
+                    setTemplate(result);
+                }
+            }
+        );
     }
 
-    function onLogin(userId : number, email : string, password : string, templates : any, todayTemplate : Template) 
+    function onLogin(userId: number, email: string, password: string, templates: any, todayTemplate: Template) 
     {
         console.log(`received templates, logging in: ${JSON.stringify(templates)}`)
         setUserId(userId); 
@@ -120,7 +125,9 @@ export function MainPage() {
         setUserPassword(password); 
         const parsedTemplates = parseTemplates(templates); 
         setTemplates(parsedTemplates); 
-        setTodayTemplate(todayTemplate) 
+        setTodayTemplate(todayTemplate); 
+        setTemplate(todayTemplate); 
+        setTodayMode(true); 
     }
 
   return (
