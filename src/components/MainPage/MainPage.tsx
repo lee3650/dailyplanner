@@ -8,7 +8,7 @@ import { useState } from "react";
 import { TemplatePanel, TemplatePanelProps } from "../TemplatePanel/TemplatePanel";
 import { LoginPanel, LoginPanelProps } from "../LoginPanel/LoginPanel";
 import { TODAY_ID, GUEST_ID, UNINIT_ID } from "../constants";
-import { serverAddTemplate, serverAddEventData, serverDeleteTemplate, serverUpdateEventData, loadTemplates, fetchTemplate, parseTemplates, serverLoadIntoToday, serverRenameTemplate, serverDeleteEvent } from "../api";
+import { serverAddTemplate, serverAddEventData, serverDeleteTemplate, serverUpdateEventData, loadTemplates, fetchTemplate, parseTemplates, serverLoadIntoToday, serverRenameTemplate, serverDeleteEvent, serverDuplicateTemplate } from "../api";
 import { Account } from "../../model/Account";
 
 const blankTemplate = new Template([], 'blank', -10); 
@@ -22,13 +22,18 @@ export function MainPage() {
     const [template, setTemplate] = useState(blankTemplate);  
     // todo - this needs to sync w/ the server 
     const [templates, setTemplates] = useState([] as Template[]); 
-    const [todayTemplate, setTodayTemplate] = useState(new Template([], 'today', TODAY_ID))
+    const [todayCount, setTodayCount] = useState(0); 
 
     const addData = (val : EventData) : void => {
         // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
         // const next = new Template([...template.data, val], template.name, template.id); 
         serverAddEventData(new Account(userId, userPassword), template.id, val)
-        .then(result => setTemplate(result)); 
+        .then(result => {
+            setTemplate(result)
+            if (todayMode) {
+                setTodayCount(result.data.length)
+            }
+        })
     }
 
     const addTemplate = (name : string) => {
@@ -46,15 +51,14 @@ export function MainPage() {
 
     const duplicateTemplate = (index : number) =>
     {
-        // TODO // 
-        /*
-        const next = templates[index].duplicate(getNextId()); 
-        addTemplate(next); 
-        */
+       const toDuplicate = templates[index].id; 
+       serverDuplicateTemplate(new Account(userId, userPassword), toDuplicate)
+       .then(response => setTemplates(response));
     }
 
     const updateData = (index : number, val : EventData) : void => {
         // *technically* we should perform a fetch here to make sure that it hasn't updated while the page is open 
+        val.id = template.data[index].id; 
         serverUpdateEventData(new Account(userId, userPassword), template.id, val)
         .then(next => setTemplate(next)); 
     }
@@ -64,6 +68,7 @@ export function MainPage() {
         .then(value => {
             const newToday = new Template(value.data, 'today', TODAY_ID); 
             setTemplate(newToday);
+            setTodayCount(newToday.data.length)
             setTodayMode(true); 
         })
         .catch(reason => {
@@ -81,6 +86,10 @@ export function MainPage() {
                 throw new Error("Modified the wrong template when deleting event!"); 
             }
             setTemplate(result);
+            if (todayMode || id == TODAY_ID)
+            {
+                setTodayCount(result.data.length); 
+            }
         }); 
     }
 
@@ -100,8 +109,8 @@ export function MainPage() {
     const deleteTemplate = (id : number) => {
         console.log(`deleting index with id ${id}!`)
         serverDeleteTemplate(new Account(userId, userPassword), id)
-        .then(result => setTemplates(result)); 
-        // .then(() => viewToday()) 
+        .then(result => setTemplates(result))
+        .then(() => viewToday()); 
     }
 
     const renameTemplate = (index : number, newName : string) => {
@@ -125,7 +134,7 @@ export function MainPage() {
         setUserPassword(password); 
         const parsedTemplates = parseTemplates(templates); 
         setTemplates(parsedTemplates); 
-        setTodayTemplate(todayTemplate); 
+        setTodayCount(todayTemplate.data.length); 
         setTemplate(todayTemplate); 
         setTodayMode(true); 
     }
@@ -136,7 +145,7 @@ export function MainPage() {
         <div className={css.container}>
             <div className={css.narrow_menu}>
                 <TemplatePanel {...new TemplatePanelProps(templates, loadIntoToday, addTemplate, deleteTemplate, editTemplate, viewToday,
-                    todayTemplate.data.length == 0, duplicateTemplate, renameTemplate)} />
+                    todayCount == 0, duplicateTemplate, renameTemplate)} />
             </div>
             <div className={css.hline}></div>
             <div className={css.menu}>

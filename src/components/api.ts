@@ -1,7 +1,7 @@
 import { Account } from "../model/Account";
 import { EventData, Time } from "../model/EventData";
 import { Template } from "../model/Template";
-import { ADD_EVENT_DATA_URL, ADD_TEMPLATE_URL, READ_TEMPLATES_URL, TODAY_ID, UPDATE_EVENT_DATA_URL, deleteEventUrl, deleteTemplateUrl, loadIntoTodayUrl, readTemplateUrl, renameTemplateUrl } from "./constants";
+import { ADD_EVENT_DATA_URL, ADD_TEMPLATE_URL, READ_TEMPLATES_URL, TODAY_ID, LOGIN_URL, UPDATE_EVENT_DATA_URL, deleteEventUrl, deleteTemplateUrl, duplicateTemplateUrl, loadIntoTodayUrl, readTemplateUrl, renameTemplateUrl } from "./constants";
 import axios from "axios";
 
 export function serverAddEventData(account : Account, templateId : number, data : EventData) : Promise<Template>
@@ -81,10 +81,32 @@ export function parseTemplates(data : any) : Template[]
     return result; 
 }
 
+export async function serverLogin(email : string, password : string) : Promise<any>
+{
+        const data = {
+            email: email, 
+            passwordHash: password
+        }
+
+        return axios.post(LOGIN_URL, data, {
+            headers: {
+                Accept: "application/json", 
+            }
+        })
+}
+
+export async function serverDuplicateTemplate(account : Account, templateId : number) : Promise<Template[]>
+{
+    const data = await axios.post(duplicateTemplateUrl(templateId), {},
+        getHeaders(account)
+    )
+    return parseTemplates(data.data)
+}
+
 export async function serverRenameTemplate(account : Account, id : number, newName : string) : Promise<Template>
 {
     const data = await axios.post(renameTemplateUrl(id), {
-        newName
+        newName: newName
     },
         getHeaders(account)
     )

@@ -3,7 +3,7 @@ import css from './LoginPanel.module.css'
 import { GUEST_ID, LOGIN_URL, READ_TEMPLATES_URL } from '../constants';
 import axios from 'axios';
 import { Template } from '../../model/Template';
-import { fetchTemplate } from '../api';
+import { fetchTemplate, serverLoadIntoToday, serverLogin } from '../api';
 import { Account } from '../../model/Account';
 
 export class LoginPanelProps {
@@ -26,16 +26,7 @@ export const LoginPanel : FC<LoginPanelProps> = (props : LoginPanelProps) => {
     }
 
     const requestLogin = () => {
-        const data = {
-            email: email, 
-            passwordHash: password
-        }
-
-        axios.post(LOGIN_URL, data, {
-            headers: {
-                Accept: "application/json", 
-            }
-        })
+        serverLogin(email, password)
         .then(response => fetchTemplate(new Account(response.data.id, password), -1)
         .then(result => loginSucceeded(response.data, result)))
         .catch(reason => {console.log(JSON.stringify(reason)); setError(reason.message + (reason.response ? (": " + reason.response.data) : ""))});  

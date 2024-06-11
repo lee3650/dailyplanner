@@ -13,6 +13,7 @@ export const loadIntoTodayUrl = (templateId : number) => BASE_URL + `loadIntoTod
 export const deleteEventUrl = (id : number) => BASE_URL + `deleteEvent/${id}`;
 
 export const renameTemplateUrl = (id : number) => BASE_URL + `renameTemplate/${id}`
+export const duplicateTemplateUrl = (id : number) => BASE_URL + `duplicateTemplate/${id}`
 export const ADD_EVENT_DATA_URL = BASE_URL + 'addEvent'; 
 export const UPDATE_EVENT_DATA_URL = BASE_URL + 'updateEvent'; 
 
