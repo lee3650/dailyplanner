@@ -3,7 +3,7 @@ import css from './LoginPanel.module.css'
 import { GUEST_ID, LOGIN_URL, READ_TEMPLATES_URL } from '../constants';
 import axios from 'axios';
 import { Template } from '../../model/Template';
-import { fetchTemplate, serverLoadIntoToday, serverLogin } from '../api';
+import { fetchTemplate, serverCreateAccount, serverLoadIntoToday, serverLogin } from '../api';
 import { Account } from '../../model/Account';
 
 export class LoginPanelProps {
@@ -33,7 +33,12 @@ export const LoginPanel : FC<LoginPanelProps> = (props : LoginPanelProps) => {
     }
 
     const requestCreateAccount = () => {
-
+        serverCreateAccount(email, password)
+        .then(response => {
+                const data = response.data
+                props.onLogin(data.id, email, password, [], new Template([], 'today', data.todayTemplate))
+            })
+        .catch(reason => setError(reason.message + (reason.response ? (": " + reason.response.data) : ""))); 
     }
 
     return (

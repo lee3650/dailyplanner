@@ -1,7 +1,7 @@
 import { Account } from "../model/Account";
 import { EventData, Time } from "../model/EventData";
 import { Template } from "../model/Template";
-import { ADD_EVENT_DATA_URL, ADD_TEMPLATE_URL, READ_TEMPLATES_URL, TODAY_ID, LOGIN_URL, UPDATE_EVENT_DATA_URL, deleteEventUrl, deleteTemplateUrl, duplicateTemplateUrl, loadIntoTodayUrl, readTemplateUrl, renameTemplateUrl } from "./constants";
+import { ADD_EVENT_DATA_URL, ADD_TEMPLATE_URL, READ_TEMPLATES_URL, TODAY_ID, LOGIN_URL, UPDATE_EVENT_DATA_URL, deleteEventUrl, deleteTemplateUrl, duplicateTemplateUrl, loadIntoTodayUrl, readTemplateUrl, renameTemplateUrl, CREATE_ACCOUNT_URL } from "./constants";
 import axios from "axios";
 
 export function serverAddEventData(account : Account, templateId : number, data : EventData) : Promise<Template>
@@ -79,6 +79,14 @@ export function parseTemplates(data : any) : Template[]
     console.log(`parsed templates: ${JSON.stringify(result)}`)
 
     return result; 
+}
+
+export async function serverCreateAccount(email : string, password : string) : Promise<any>
+{
+    return axios.post(CREATE_ACCOUNT_URL, {
+        email: email, 
+        passwordHash: password   
+    })
 }
 
 export async function serverLogin(email : string, password : string) : Promise<any>
