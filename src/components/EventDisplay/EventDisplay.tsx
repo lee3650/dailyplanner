@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { EventData, Time } from "../../model/EventData"
 import css from './EventDisplay.module.css'
 import { EventLine, EventLineProps } from "./EventLine";

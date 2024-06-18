@@ -4,8 +4,8 @@ import { test, expect} from '@jest/globals';
 
 test('Compute overlap finds overlap', () => {
     const testdata = [ 
-        new EventData('a', new Time(0,0), new Time(0, 30)), 
-        new EventData('b', new Time(0,10), new Time(0, 40)), 
+        new EventData('a', new Time(0,0), new Time(0, 30), 0), 
+        new EventData('b', new Time(0,10), new Time(0, 40), 1), 
     ]; 
     const result = ComputeOverlapArray(testdata); 
     expect(result[0]).toBeCloseTo(0); 
@@ -14,9 +14,9 @@ test('Compute overlap finds overlap', () => {
 
 test('Compute overlap works for non-overlapping events', () => {
     const testdata = [ 
-        new EventData('a', new Time(0,0), new Time(0, 30)), 
-        new EventData('b', new Time(0,30), new Time(0, 40)), 
-        new EventData('b', new Time(0,40), new Time(0, 50)), 
+        new EventData('a', new Time(0,0), new Time(0, 30), 1), 
+        new EventData('b', new Time(0,30), new Time(0, 40), 2), 
+        new EventData('b', new Time(0,40), new Time(0, 50), 3), 
     ]; 
     const result = ComputeOverlapArray(testdata); 
     expect(result[0]).toBeCloseTo(0); 
@@ -26,8 +26,8 @@ test('Compute overlap works for non-overlapping events', () => {
 
 test('Compute overlap works for equal events', () => {
     const testdata = [ 
-        new EventData('a', new Time(0,0), new Time(0, 30)), 
-        new EventData('b', new Time(0,0), new Time(0, 30)), 
+        new EventData('a', new Time(0,0), new Time(0, 30), 0), 
+        new EventData('b', new Time(0,0), new Time(0, 30), 1), 
     ]; 
     const result = ComputeOverlapArray(testdata); 
     expect(result[0]).toBeCloseTo(0); 
@@ -40,10 +40,10 @@ but that's probably not possible so let's ignore that for now
 */
 test('Compute overlap works for multiple overlapping events', () => {
     const testdata = [ 
-        new EventData('a', new Time(0,0), new Time(0, 30)), 
-        new EventData('b', new Time(0,10), new Time(0, 40)), 
-        new EventData('c', new Time(0,20), new Time(0, 50)), 
-        new EventData('d', new Time(0,50), new Time(1, 10)), 
+        new EventData('a', new Time(0,0), new Time(0, 30), 0), 
+        new EventData('b', new Time(0,10), new Time(0, 40), 1), 
+        new EventData('c', new Time(0,20), new Time(0, 50), 2), 
+        new EventData('d', new Time(0,50), new Time(1, 10), 3), 
     ]; 
     const result = ComputeOverlapArray(testdata); 
     expect(result[0]).toBeCloseTo(0); 
@@ -54,10 +54,10 @@ test('Compute overlap works for multiple overlapping events', () => {
 
 test('Compute overlap works for surrounded events', () => {
     const testdata = [ 
-        new EventData('a', new Time(0,0), new Time(2, 30)), 
-        new EventData('b', new Time(0,10), new Time(0, 40)), 
-        new EventData('c', new Time(0,20), new Time(0, 50)), 
-        new EventData('d', new Time(0,50), new Time(1, 10)), 
+        new EventData('a', new Time(0,0), new Time(2, 30), 0), 
+        new EventData('b', new Time(0,10), new Time(0, 40), 1), 
+        new EventData('c', new Time(0,20), new Time(0, 50), 2), 
+        new EventData('d', new Time(0,50), new Time(1, 10), 3), 
     ]; 
     const result = ComputeOverlapArray(testdata); 
     console.log(`computed result: ${result}`); 

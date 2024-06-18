@@ -2,12 +2,11 @@ import { EventData } from "../../model/EventData";
 import { Template } from "../../model/Template";
 import WorkingArea from "../WorkingArea";
 import { EventDisplay, EventDisplayProps } from "../EventDisplay/EventDisplay";
-import { Time } from "../../model/EventData";
 import css from './MainPage.module.css';
 import { useState } from "react";
 import { TemplatePanel, TemplatePanelProps } from "../TemplatePanel/TemplatePanel";
 import { LoginPanel, LoginPanelProps } from "../LoginPanel/LoginPanel";
-import { TODAY_ID, GUEST_ID, UNINIT_ID } from "../constants";
+import { TODAY_ID, UNINIT_ID } from "../constants";
 import { serverAddTemplate, serverAddEventData, serverDeleteTemplate, serverUpdateEventData, loadTemplates, fetchTemplate, parseTemplates, serverLoadIntoToday, serverRenameTemplate, serverDeleteEvent, serverDuplicateTemplate } from "../api";
 import { Account } from "../../model/Account";
 
@@ -17,6 +16,7 @@ export function MainPage() {
 
     const [userId, setUserId] = useState(UNINIT_ID); 
     const [userPassword, setUserPassword] = useState(''); 
+    /* @ts-ignore */
     const [userEmail, setUserEmail] = useState(''); 
     const [todayMode, setTodayMode] = useState(true); 
     const [template, setTemplate] = useState(blankTemplate);  

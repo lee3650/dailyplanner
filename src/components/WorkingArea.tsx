@@ -1,7 +1,7 @@
 import wa from './WorkingArea.module.css'
 import EventListing from './EventListing/EventListing';
 import { EventListingProps } from './EventListing/EventListing';
-import {EventData, Time, ParsedEventData } from '../model/EventData';
+import {EventData} from '../model/EventData';
 import React, { useState } from 'react';
 import { ParseEvent } from '../model/Parser';
 import NewEventButton, {NewEventButtonProps} from './NewEventButton/NewEventButton';

@@ -1,5 +1,5 @@
 import el from './EventListing.module.css'; 
-import {EventData, Time } from '../../model/EventData';
+import {EventData } from '../../model/EventData';
 import React, {useState} from 'react';
 import { EventInput, EventInputProps } from '../EventInput/EventInput';
 

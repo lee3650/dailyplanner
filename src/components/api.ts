@@ -1,7 +1,7 @@
 import { Account } from "../model/Account";
 import { EventData, Time } from "../model/EventData";
 import { Template } from "../model/Template";
-import { ADD_EVENT_DATA_URL, ADD_TEMPLATE_URL, READ_TEMPLATES_URL, TODAY_ID, LOGIN_URL, UPDATE_EVENT_DATA_URL, deleteEventUrl, deleteTemplateUrl, duplicateTemplateUrl, loadIntoTodayUrl, readTemplateUrl, renameTemplateUrl, CREATE_ACCOUNT_URL } from "./constants";
+import { ADD_EVENT_DATA_URL, ADD_TEMPLATE_URL, READ_TEMPLATES_URL, LOGIN_URL, UPDATE_EVENT_DATA_URL, deleteEventUrl, deleteTemplateUrl, duplicateTemplateUrl, loadIntoTodayUrl, readTemplateUrl, renameTemplateUrl, CREATE_ACCOUNT_URL } from "./constants";
 import axios from "axios";
 
 export function serverAddEventData(account : Account, templateId : number, data : EventData) : Promise<Template>
@@ -132,6 +132,7 @@ function getHeaders(account : Account)
 
 export function parseTemplate(data: any): Template {
     const d: EventData[] = []
+    /* @ts-ignore */
     data.events.forEach(e => d.push(new EventData(e.name, Time.fromInt(e.startTime), Time.fromInt(e.endTime), e.id)));
     const template = new Template(d, data.name, data.id);
     return template

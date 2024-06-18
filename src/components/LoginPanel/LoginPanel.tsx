@@ -1,9 +1,8 @@
 import { FC, useState } from 'react'
 import css from './LoginPanel.module.css'
-import { GUEST_ID, LOGIN_URL, READ_TEMPLATES_URL } from '../constants';
-import axios from 'axios';
+import { GUEST_ID } from '../constants';
 import { Template } from '../../model/Template';
-import { fetchTemplate, serverCreateAccount, serverLoadIntoToday, serverLogin } from '../api';
+import { fetchTemplate, serverCreateAccount, serverLogin } from '../api';
 import { Account } from '../../model/Account';
 
 export class LoginPanelProps {
