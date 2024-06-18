@@ -11,7 +11,7 @@ export const ParseEvent : (val : string) => ParsedEventData = (val : string) => 
     if (!match)
     {
         console.log(`failed to parse event!`); 
-        return new ParsedEventData(false, new EventData(val, new Time(0,0), new Time(0,0)), "Missing time range! Add start and end time HH:MM-HH:MM"); 
+        return new ParsedEventData(false, new EventData(val, new Time(0,0), new Time(0,0), -1), "Missing time range! Add start and end time HH:MM-HH:MM"); 
     }
 
     const start = match[1];
@@ -29,20 +29,20 @@ export const ParseEvent : (val : string) => ParsedEventData = (val : string) => 
         const last = val.substring(endHl);
 
         if (!Time.validTimeString(start) || !Time.validTimeString(end)) {
-            return new ParsedEventData(false, new EventData("", new Time(0, 0), new Time(0, 0)), "Start or end time was not valid!");
+            return new ParsedEventData(false, new EventData("", new Time(0, 0), new Time(0, 0), -1), "Start or end time was not valid!");
         }
 
         const startTime = Time.fromString(start);
         const endTime = Time.fromString(end);
 
         if (endTime.leq(startTime)) {
-            return new ParsedEventData(false, new EventData("", new Time(0, 0), new Time(0, 0)), "Start time must be before end time!");
+            return new ParsedEventData(false, new EventData("", new Time(0, 0), new Time(0, 0), -1), "Start time must be before end time!");
         }
 
-        return new ParsedEventData(true, new EventData(`${first.trim()} ${last.trim()}`, startTime, endTime), "");
+        return new ParsedEventData(true, new EventData(`${first.trim()} ${last.trim()}`, startTime, endTime, -1), "");
     }
     catch (e: any) {
-        return new ParsedEventData(false, new EventData(val, new Time(0, 0), new Time(0, 0)), "Failed to parse start and end time!");
+        return new ParsedEventData(false, new EventData(val, new Time(0, 0), new Time(0, 0), -1), "Failed to parse start and end time!");
     }
 }
 

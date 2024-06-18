@@ -1,17 +1,26 @@
-const getTimeString = (start : Time, end : Time) => {
-    return `${start.toString()} - ${end.toString()}`; 
+const getTimeString = (start: Time, end: Time) => {
+    return `${start.toString()} - ${end.toString()}`;
 }
 
 export class EventData {
-    constructor(public title : string, public start : Time, public end : Time) {
+    constructor(public title: string, public start: Time, public end: Time, public id: number) {
     }
 
-    toString() : string {
-        return `${this.start.toStandardString()}-${this.end.toStandardString()} ${this.title}`; 
+    toString(): string {
+        return `${this.start.toStandardString()}-${this.end.toStandardString()} ${this.title}`;
     }
 
-    timeString() : string {
-        return getTimeString(this.start, this.end); 
+    timeString(): string {
+        return getTimeString(this.start, this.end);
+    }
+
+    toRequestBody() {
+        return {
+            id: this.id,
+            startTime: this.start.getMinutes(),
+            endTime: this.end.getMinutes(),
+            name: this.title
+        }
     }
 }
 
@@ -76,6 +85,11 @@ export class Time {
     toStandardString() {
         const mins = this.minutes.toLocaleString('en-US', { minimumIntegerDigits: 2 });
         return `${this.hours}:${mins}`;
+    }
+
+    static fromInt(val : number) : Time 
+    {
+        return new Time(Math.floor(val / 60), Math.round(val) % 60); 
     }
 
     static fromString(val : string) : Time

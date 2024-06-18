@@ -9,9 +9,9 @@ import { Template } from '../../model/Template'
 import { ConfirmationPanel, ConfirmationProps } from '../ConfirmationPanel/ConfirmationPanel'
 
 export class TemplatePanelProps {
-    constructor(public data : Template[], public loadIntoToday : (template : Template) => void, public addTemplate : (toAdd : Template) => void, 
+    constructor(public data : Template[], public loadIntoToday : (template : Template) => void, public addTemplate : (toAdd : string) => void, 
     public deleteTemplate : (index : number) => void, public editTemplate : (index : number) => void, public viewToday : () => void, 
-    public todayBlank : boolean, public onDuplicate : (index : number) => void, public getNextId : () => number, 
+    public todayBlank : boolean, public onDuplicate : (index : number) => void, 
     public renameTemplate : (index : number, val : string) => void) {
 
     }
@@ -73,9 +73,8 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
     }
 
     const addNewTemplate = (name : string) => {
-        const next = new Template([], name, props.getNextId()); 
         // this function should also load that template 
-        props.addTemplate(next); 
+        props.addTemplate(name); 
     }
 
     const onEdit = (val : number) => {
@@ -94,7 +93,7 @@ export const TemplatePanel : FC<TemplatePanelProps> = (props : TemplatePanelProp
 
     const doDelete = () => {
         clickOff(); 
-        props.deleteTemplate(toDeleteIdx); 
+        props.deleteTemplate(templates[toDeleteIdx].id); 
         setToDeleteIdx(-1); 
     }
 

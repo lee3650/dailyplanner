@@ -1,4 +1,19 @@
 # TODO 
+## API
+
+Endpoints used / needed: 
+
+- [x] createAccount(email, password)
+- [x] login(email, password)
+- [x] readTemplate(userId, templateId)
+- [x] writeTemplate(userId, templateId)
+- [x] readTemplates(userId)
+- [x] writeTemplates(userId, templates)
+
+### Issues
+
+- [ ] The error when the email or password is wrong is very unclear. It says like 'login failed' or something, it should say "invalid email or password" 
+
 ## Bugs / verification
 
 - [ ] We need some kind of verification on the `Time` class - make sure negative numbers are not input and make sure that all the values are within range (i.e., 0-23, 0-59 inclusive)
